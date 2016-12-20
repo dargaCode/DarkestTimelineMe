@@ -29,9 +29,17 @@ function drawSquare(e) {
 
   console.log(clickX, clickY);
 
+  clearCanvas();
   ctx.fillRect(squareX, squareY, 70, 70);
 }
 
 //HELPERS
+
+function clearCanvas() {
+  const width = canvas.width;
+  const height = canvas.height;
+
+  ctx.clearRect(0, 0, width, height);
+}
 
 // MAIN
