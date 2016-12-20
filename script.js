@@ -1,4 +1,4 @@
-// use strict;
+'use strict';
 
 const SQUARE_WIDTH = 70;
 const MIDPOINT = SQUARE_WIDTH / 2;
