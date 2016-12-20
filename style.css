@@ -1,12 +1,20 @@
 
 body {
   background: #666;
-  margin: 0;
+  margin: 20px;
   padding: 0;
 }
 
 canvas {
   outline: 2px solid #222;
   background: #eee;
-  margin: 20px;
+  margin: 20px 0;
+}
+
+.download-link {
+  color: blue;
+}
+
+.download-link:hover {
+  text-decoration: underline;
 }

@@ -10,6 +10,7 @@ const MIDPOINT = SQUARE_WIDTH / 2;
 
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
+const downloadLink = document.querySelector('#download-link');
 
 //SETTINGS
 
@@ -18,6 +19,7 @@ ctx.fillStyle = '#D00';
 //EVENTS
 
 canvas.addEventListener('click', drawSquare);
+downloadLink.addEventListener('click', saveImage);
 
 //FUNCTIONS
 
@@ -31,9 +33,13 @@ function drawSquare(e) {
   console.log(clickX, clickY);
 
   // TODO don't actually need to clear canvas now that background is drawn
-  clearCanvas();
-  ctx.drawImage(background, 0, 0);
+  // clearCanvas();
+  // ctx.drawImage(background, 0, 0);
   ctx.fillRect(squareX, squareY, 70, 70);
+}
+
+function saveImage() {
+  this.href = canvas.toDataURL('image/png');
 }
 
 //HELPERS
