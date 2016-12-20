@@ -22,6 +22,7 @@ canvas.addEventListener('click', drawSquare);
 //FUNCTIONS
 
 function drawSquare(e) {
+
   const clickX = e.offsetX;
   const clickY = e.offsetY;
   const squareX = clickX - MIDPOINT;
@@ -29,7 +30,9 @@ function drawSquare(e) {
 
   console.log(clickX, clickY);
 
+  // TODO don't actually need to clear canvas now that background is drawn
   clearCanvas();
+  ctx.drawImage(background, 0, 0);
   ctx.fillRect(squareX, squareY, 70, 70);
 }
 
@@ -43,3 +46,11 @@ function clearCanvas() {
 }
 
 // MAIN
+
+const background = new Image();
+
+background.addEventListener("load", function() {
+  ctx.drawImage(background, 0, 0);
+}, false);
+
+background.src = 'background.jpg';
