@@ -3,8 +3,12 @@
 
 //CONSTANTS
 
-const SQUARE_WIDTH = 70;
-const MIDPOINT = SQUARE_WIDTH / 2;
+const SHAPE_WIDTH = 10;
+const MIDPOINT = SHAPE_WIDTH / 2;
+
+// GLOBALS
+
+let dragging = false;
 
 //DOM HANDLES
 
@@ -18,24 +22,31 @@ ctx.fillStyle = '#D00';
 
 //EVENTS
 
-canvas.addEventListener('click', drawSquare);
+canvas.addEventListener('mousedown', toggleDrag);
+canvas.addEventListener('mouseup', toggleDrag);
+canvas.addEventListener('mousemove', paint);
 downloadLink.addEventListener('click', saveImage);
 
 //FUNCTIONS
 
-function drawSquare(e) {
+function toggleDrag() {
+  dragging = !dragging;
+}
 
+function paint(e) {
   const clickX = e.offsetX;
   const clickY = e.offsetY;
-  const squareX = clickX - MIDPOINT;
-  const squareY = clickY - MIDPOINT;
+  const shapeX = clickX - MIDPOINT;
+  const shapeY = clickY - MIDPOINT;
 
   console.log(clickX, clickY);
 
   // TODO don't actually need to clear canvas now that background is drawn
   // clearCanvas();
-  // ctx.drawImage(background, 0, 0);
-  ctx.fillRect(squareX, squareY, 70, 70);
+  // ctx.drawImage(background, shapeX, shapeY);
+  if (dragging) {
+    ctx.fillRect(shapeX, shapeY, SHAPE_WIDTH, SHAPE_WIDTH);
+  }
 }
 
 function saveImage() {
