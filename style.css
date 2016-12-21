@@ -13,6 +13,7 @@ canvas {
 
 .download-link {
   color: blue;
+  display: block;
 }
 
 .download-link:hover {
