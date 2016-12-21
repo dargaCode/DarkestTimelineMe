@@ -10,6 +10,20 @@ const MIDPOINT = SHAPE_WIDTH / 2;
 
 let dragging = false;
 
+const CURSOR = {
+  lastPos: {
+    x: null,
+    y: null,
+  }
+}
+
+const BACKGROUND = {
+  lastPos: {
+    x: null,
+    y: null,
+  }
+}
+
 //DOM HANDLES
 
 const canvas = document.querySelector('#canvas');
@@ -20,21 +34,59 @@ const downloadLink = document.querySelector('#download-link');
 
 ctx.fillStyle = '#D00';
 
-//EVENTS
+//EVENT BINDINGS
 
 canvas.addEventListener('mousedown', startDrag);
 canvas.addEventListener('mouseup', stopDrag);
 canvas.addEventListener('mousemove', paint);
 downloadLink.addEventListener('click', saveImage);
 
-//FUNCTIONS
+//EVENT HANDLERS
 
-function startDrag() {
+function startDrag(e) {
   dragging = true;
+
+  // set drag start point to click location
+  CURSOR.lastPos.x = e.offsetX;
+  CURSOR.lastPos.y = e.offsetY;
 }
 
-function stopDrag() {
+function stopDrag(e) {
+  dragBackground(e);
+
   dragging = false;
+
+  // set drag start point to null
+  CURSOR.lastPos.x = null;
+  CURSOR.lastPos.y = null;
+}
+
+function dragBackground(e) {
+  // set the new pos
+  const newPos = {
+    x: e.offsetX,
+    y: e.offsetY,
+  };
+
+  // use the newpos to get the drag delta of the cursor
+  const cursorDelta = getCursorDelta(newPos);
+
+  // move the background by the same delta
+  moveBackground(cursorDelta);
+}
+
+function getCursorDelta(newPos) {
+  // get lastPos from constant
+  const lastPos = CURSOR.lastPos;
+
+  // subtract newpos from lastPos
+  const delta = {
+    x: newPos.x - lastPos.x,
+    y: newPos.y - lastPos.y,
+  }
+
+  // return delta object
+  return delta;
 }
 
 function paint(e) {
@@ -43,11 +95,6 @@ function paint(e) {
   const shapeX = clickX - MIDPOINT;
   const shapeY = clickY - MIDPOINT;
 
-  console.log(clickX, clickY);
-
-  // TODO don't actually need to clear canvas now that background is drawn
-  // clearCanvas();
-  // ctx.drawImage(background, shapeX, shapeY);
   if (dragging) {
     ctx.fillRect(shapeX, shapeY, SHAPE_WIDTH, SHAPE_WIDTH);
   }
@@ -57,7 +104,26 @@ function saveImage() {
   this.href = canvas.toDataURL('image/png');
 }
 
-//HELPERS
+//HELPER FUNCTIONS
+
+function moveBackground(delta) {
+  // get last position from constant
+  const lastPos = BACKGROUND.lastPos;
+
+  // add delta to those numbers
+  const newX = lastPos.x + delta.x;
+  const newY = lastPos.y + delta.y;
+
+  // update background lastpos
+  BACKGROUND.lastPos.x = newX;
+  BACKGROUND.lastPos.y = newY;
+
+  // clear the background
+  clearCanvas();
+
+  // redraw the background
+  ctx.drawImage(background, newX, newY);
+}
 
 function clearCanvas() {
   const width = canvas.width;
