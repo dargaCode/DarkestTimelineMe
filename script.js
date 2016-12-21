@@ -22,15 +22,19 @@ ctx.fillStyle = '#D00';
 
 //EVENTS
 
-canvas.addEventListener('mousedown', toggleDrag);
-canvas.addEventListener('mouseup', toggleDrag);
+canvas.addEventListener('mousedown', startDrag);
+canvas.addEventListener('mouseup', stopDrag);
 canvas.addEventListener('mousemove', paint);
 downloadLink.addEventListener('click', saveImage);
 
 //FUNCTIONS
 
-function toggleDrag() {
-  dragging = !dragging;
+function startDrag() {
+  dragging = true;
+}
+
+function stopDrag() {
+  dragging = false;
 }
 
 function paint(e) {
