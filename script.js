@@ -161,7 +161,7 @@ function moveBackground(delta) {
   imageDragger.setOldBackgroundPos(newX, newY);
 
   // reset new pos to null
-  imageDragger.resetNewBackgroundpos();
+  imageDragger.resetNewBackgroundPos();
 }
 
 function clearCanvas() {
