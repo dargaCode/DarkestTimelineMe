@@ -22,8 +22,8 @@ function ImageDragger() {
       y: null,
     },
     newPos: {
-      x: null,
-      y: null,
+      x: 0,
+      y: 0,
     },
   };
 }
@@ -188,15 +188,13 @@ function saveImage() {
   this.href = canvas.toDataURL('image/png');
 }
 
-// MAIN
-
-const backgroundImg = new Image();
-
-backgroundImg.addEventListener("load", function() {
-  ctx.drawImage(backgroundImg, 0, 0);
-}, false);
-
-backgroundImg.src = 'background.jpg';
+//MAIN
 
 // instantiate class
 const imageDragger = new ImageDragger();
+
+const backgroundImg = new Image();
+
+backgroundImg.addEventListener("load", drawBackground);
+
+backgroundImg.src = 'background.jpg';
