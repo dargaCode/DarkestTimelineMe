@@ -76,6 +76,17 @@ ImageDragger.prototype.generateCursorDelta = function() {
   return delta;
 }
 
+// allows the image to be repeatedly dragged
+ImageDragger.prototype.migrateBackgroundPos = function() {
+  const newPos = this.background.newPos;
+
+  // move new pos to old pos
+  this.setOldBackgroundPos(newPos.x, newPos.y);
+
+  // reset new pos to nulls
+  this.resetNewBackgroundPos();
+}
+
 // end ImageDragger Class
 
 //DOM HANDLES
@@ -154,11 +165,7 @@ function moveBackground(delta) {
 
   redrawBackground();
 
-  // update background lastpos
-  imageDragger.setOldBackgroundPos(newX, newY);
-
-  // reset new pos to null
-  imageDragger.resetNewBackgroundPos();
+  imageDragger.migrateBackgroundPos();
 }
 
 function redrawBackground() {
