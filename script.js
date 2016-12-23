@@ -63,6 +63,19 @@ ImageDragger.prototype.resetNewBackgroundPos = function() {
   this.background.newPos.y = null;
 }
 
+  // helper methods
+
+ImageDragger.prototype.generateCursorDelta = function() {
+  // subtract newpos from lastPos
+  const delta = {
+    x: this.cursor.newPos.x - this.cursor.oldPos.x,
+    y: this.cursor.newPos.y - this.cursor.oldPos.y,
+  }
+
+  // return delta object
+  return delta;
+}
+
 // end ImageDragger Class
 
 //DOM HANDLES
@@ -105,24 +118,10 @@ function dragBackground(e) {
   imageDragger.setNewCursorPos(e.offsetX, e.offsetY);
 
   // use the newpos to get the drag delta of the cursor
-  const cursorDelta = getCursorDelta(imageDragger.background.newPos);
+  const cursorDelta = imageDragger.generateCursorDelta();
 
   // move the background by the same delta
   moveBackground(cursorDelta);
-}
-
-function getCursorDelta(newPos) {
-  // get lastPos from constant
-  const lastPos = imageDragger.cursor.oldPos;
-
-  // subtract newpos from lastPos
-  const delta = {
-    x: newPos.x - lastPos.x,
-    y: newPos.y - lastPos.y,
-  }
-
-  // return delta object
-  return delta;
 }
 
 function paintSquare(e) {
