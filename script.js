@@ -72,6 +72,17 @@ ImageDragger.prototype.dragBegin = function(startX, startY) {
   this.setOldCursorPos(startX, startY);
 }
 
+ImageDragger.prototype.dragEnd = function() {
+  this.dragging = false;
+
+  // reset unneeded data
+  this.resetOldCursorPos();
+  this.resetNewCursorPos();
+
+  // prepare background pos for next drag
+  this.migrateBackgroundPos();
+}
+
   // helper methods
 
 ImageDragger.prototype.generateNewBackgroundPos = function() {
@@ -117,7 +128,7 @@ const downloadLink = document.querySelector('#download-link');
 //EVENT BINDINGS
 
 canvas.addEventListener('mousedown', dragBegin);
-canvas.addEventListener('mouseup', stopDrag);
+canvas.addEventListener('mouseup', dragEnd);
 canvas.addEventListener('mousemove', dragBackground);
 downloadLink.addEventListener('click', saveImage);
 
@@ -131,16 +142,8 @@ function dragBegin(e) {
   imageDragger.dragBegin(cursorX, cursorY);
 }
 
-function stopDrag(e) {
-  // dragBackground(e);
-
-  imageDragger.dragging = false;
-
-  // set drag start point to null
-  imageDragger.resetOldCursorPos();
-  imageDragger.resetNewCursorPos();
-
-  imageDragger.migrateBackgroundPos();
+function dragEnd() {
+  imageDragger.dragEnd();
 }
 
 function dragBackground(e) {
