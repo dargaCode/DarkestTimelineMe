@@ -84,14 +84,17 @@ ImageDragger.prototype.drag = function(currentX, currentY) {
 }
 
 ImageDragger.prototype.dragEnd = function() {
-  this.dragging = false;
+  // only end drag when a drag is in progress. This improves behavior when drag is ended by dragging beyond canvas border, but mouseup happens after cursor comes back in.
+  if(this.dragging) {
+    this.dragging = false;
 
-  // reset unneeded data
-  this.resetOldCursorPos();
-  this.resetNewCursorPos();
+    // reset unneeded data
+    this.resetOldCursorPos();
+    this.resetNewCursorPos();
 
-  // prepare background pos for next drag
-  this.migrateBackgroundPos();
+    // prepare background pos for next drag
+    this.migrateBackgroundPos();
+  }
 }
 
   // helper methods
