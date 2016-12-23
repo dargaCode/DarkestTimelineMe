@@ -6,22 +6,6 @@ const MIDPOINT = SHAPE_WIDTH / 2;
 
 // GLOBALS
 
-var dragging = false;
-
-const CURSOR = {
-  lastPos: {
-    x: null,
-    y: null,
-  }
-}
-
-const BACKGROUND = {
-  lastPos: {
-    x: null,
-    y: null,
-  }
-}
-
 // CLASSES
 
   // BACKGROUND DRAGGER
@@ -69,21 +53,21 @@ downloadLink.addEventListener('click', saveImage);
 //EVENT HANDLERS
 
 function startDrag(e) {
-  dragging = true;
+  backgroundDragger.dragging = true;
 
   // set drag start point to click location
-  CURSOR.lastPos.x = e.offsetX;
-  CURSOR.lastPos.y = e.offsetY;
+  backgroundDragger.cursor.oldPos.x = e.offsetX;
+  backgroundDragger.cursor.oldPos.y = e.offsetY;
 }
 
 function stopDrag(e) {
   dragBackground(e);
 
-  dragging = false;
+  backgroundDragger.dragging = false;
 
   // set drag start point to null
-  CURSOR.lastPos.x = null;
-  CURSOR.lastPos.y = null;
+  backgroundDragger.cursor.oldPos.x = null;
+  backgroundDragger.cursor.oldPos.y = null;
 }
 
 function dragBackground(e) {
@@ -102,7 +86,7 @@ function dragBackground(e) {
 
 function getCursorDelta(newPos) {
   // get lastPos from constant
-  const lastPos = CURSOR.lastPos;
+  const lastPos = backgroundDragger.cursor.oldPos;
 
   // subtract newpos from lastPos
   const delta = {
@@ -120,7 +104,7 @@ function paint(e) {
   const shapeX = clickX - MIDPOINT;
   const shapeY = clickY - MIDPOINT;
 
-  if (dragging) {
+  if (backgroundDragger.dragging) {
     ctx.fillRect(shapeX, shapeY, SHAPE_WIDTH, SHAPE_WIDTH);
   }
 }
@@ -133,15 +117,15 @@ function saveImage() {
 
 function moveBackground(delta) {
   // get last position from constant
-  const lastPos = BACKGROUND.lastPos;
+  const lastPos = backgroundDragger.background.oldPos;
 
   // add delta to those numbers
   const newX = lastPos.x + delta.x;
   const newY = lastPos.y + delta.y;
 
   // update background lastpos
-  BACKGROUND.lastPos.x = newX;
-  BACKGROUND.lastPos.y = newY;
+  backgroundDragger.background.oldPos.x = newX;
+  backgroundDragger.background.oldPos.y = newY;
 
   // clear the background
   clearCanvas();
