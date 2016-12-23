@@ -72,6 +72,17 @@ ImageDragger.prototype.dragBegin = function(startX, startY) {
   this.setOldCursorPos(startX, startY);
 }
 
+ImageDragger.prototype.drag = function(currentX, currentY) {
+  // set the new pos
+  this.setNewCursorPos(currentX, currentY);
+
+  // background only moves if a drag is in progress
+  if (this.dragging) {
+    this.generateNewBackgroundPos();
+    redrawBackground();
+  }
+}
+
 ImageDragger.prototype.dragEnd = function() {
   this.dragging = false;
 
@@ -128,8 +139,9 @@ const downloadLink = document.querySelector('#download-link');
 //EVENT BINDINGS
 
 canvas.addEventListener('mousedown', dragBegin);
+canvas.addEventListener('mousemove', drag);
 canvas.addEventListener('mouseup', dragEnd);
-canvas.addEventListener('mousemove', dragBackground);
+
 downloadLink.addEventListener('click', saveImage);
 
 //EVENT HANDLERS
@@ -142,21 +154,15 @@ function dragBegin(e) {
   imageDragger.dragBegin(cursorX, cursorY);
 }
 
-function dragEnd() {
-  imageDragger.dragEnd();
+function drag(e) {
+  const currentX = e.offsetX;
+  const currentY = e.offsetY;
+
+  imageDragger.drag(currentX, currentY);
 }
 
-function dragBackground(e) {
-  // set the new pos
-  imageDragger.setNewCursorPos(e.offsetX, e.offsetY);
-
-  if (imageDragger.dragging) {
-    // use the cursor delta to generate a new background pos
-    imageDragger.generateNewBackgroundPos();
-
-    redrawBackground();
-  }
-
+function dragEnd() {
+  imageDragger.dragEnd();
 }
 
 //HELPER FUNCTIONS
