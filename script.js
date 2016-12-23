@@ -1,9 +1,6 @@
 
 //CONSTANTS
 
-const SHAPE_WIDTH = 10;
-const MIDPOINT = SHAPE_WIDTH / 2;
-
 // CLASSES
 
 // IMAGE DRAGGER
@@ -110,15 +107,10 @@ const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 const downloadLink = document.querySelector('#download-link');
 
-//SETTINGS
-
-ctx.fillStyle = '#D00';
-
 //EVENT BINDINGS
 
 canvas.addEventListener('mousedown', startDrag);
 canvas.addEventListener('mouseup', stopDrag);
-canvas.addEventListener('mousemove', paintSquare);
 canvas.addEventListener('mousemove', dragBackground);
 downloadLink.addEventListener('click', saveImage);
 
@@ -154,17 +146,6 @@ function dragBackground(e) {
     redrawBackground();
   }
 
-}
-
-function paintSquare(e) {
-  const clickX = e.offsetX;
-  const clickY = e.offsetY;
-  const shapeX = clickX - MIDPOINT;
-  const shapeY = clickY - MIDPOINT;
-
-  if (imageDragger.dragging) {
-    ctx.fillRect(shapeX, shapeY, SHAPE_WIDTH, SHAPE_WIDTH);
-  }
 }
 
 //HELPER FUNCTIONS
