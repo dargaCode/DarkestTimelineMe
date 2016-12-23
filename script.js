@@ -3,7 +3,7 @@
 
 // CLASSES
 
-// IMAGE DRAGGER
+// ImageDragger Class
 function ImageDragger() {
   this.dragging = false;
   this.cursor = {
@@ -131,7 +131,7 @@ ImageDragger.prototype.migrateBackgroundPos = function() {
   this.resetNewBackgroundPos();
 }
 
-// end IMAGEDRAGGER Class
+// end ImageDragger Class
 
 //DOM HANDLES
 
