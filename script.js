@@ -138,8 +138,12 @@ function dragBackground(e) {
   // set the new pos
   imageDragger.setNewCursorPos(e.offsetX, e.offsetY);
 
-  // move the background by the same delta
-  moveBackground();
+  // use the cursor delta to generate a new background pos
+  imageDragger.generateNewBackgroundPos();
+
+  redrawBackground();
+
+  imageDragger.migrateBackgroundPos();
 }
 
 function paintSquare(e) {
@@ -158,14 +162,6 @@ function saveImage() {
 }
 
 //HELPER FUNCTIONS
-
-function moveBackground() {
-  imageDragger.generateNewBackgroundPos();
-
-  redrawBackground();
-
-  imageDragger.migrateBackgroundPos();
-}
 
 function redrawBackground() {
   const newPos = imageDragger.background.newPos;
