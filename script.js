@@ -1,6 +1,4 @@
 
-'use strict';
-
 //CONSTANTS
 
 const SHAPE_WIDTH = 10;
@@ -8,7 +6,7 @@ const MIDPOINT = SHAPE_WIDTH / 2;
 
 // GLOBALS
 
-let dragging = false;
+var dragging = false;
 
 const CURSOR = {
   lastPos: {
