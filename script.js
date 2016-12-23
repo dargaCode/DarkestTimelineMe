@@ -44,8 +44,8 @@ ImageDragger.prototype.resetOldCursorPos = function() {
 }
 
 ImageDragger.prototype.setNewCursorPos = function(x, y) {
-  this.background.newPos.x = x;
-  this.background.newPos.y = y;
+  this.cursor.newPos.x = x;
+  this.cursor.newPos.y = y;
 }
 
 ImageDragger.prototype.setOldBackgroundPos = function(x, y) {
