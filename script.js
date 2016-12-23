@@ -120,7 +120,7 @@ function moveBackground(delta) {
   clearCanvas();
 
   // redraw the background
-  ctx.drawImage(background, newX, newY);
+  ctx.drawImage(backgroundImg, newX, newY);
 }
 
 function clearCanvas() {
@@ -132,10 +132,10 @@ function clearCanvas() {
 
 // MAIN
 
-const background = new Image();
+const backgroundImg = new Image();
 
-background.addEventListener("load", function() {
-  ctx.drawImage(background, 0, 0);
+backgroundImg.addEventListener("load", function() {
+  ctx.drawImage(backgroundImg, 0, 0);
 }, false);
 
-background.src = 'background.jpg';
+backgroundImg.src = 'background.jpg';
