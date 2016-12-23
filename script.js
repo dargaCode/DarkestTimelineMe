@@ -31,6 +31,38 @@ function ImageDragger() {
   };
 }
 
+ImageDragger.prototype.setOldCursorPos = function(x, y) {
+  this.cursor.oldPos.x = x;
+  this.cursor.oldPos.y = y;
+}
+
+ImageDragger.prototype.resetOldCursorPos = function() {
+  this.cursor.oldPos.x = null;
+  this.cursor.oldPos.y = null;
+}
+
+ImageDragger.prototype.setNewCursorPos = function(x, y) {
+  this.background.newPos.x = x;
+  this.background.newPos.y = y;
+}
+
+ImageDragger.prototype.setOldBackgroundPos = function(x, y) {
+  this.background.oldPos.x = x;
+  this.background.oldPos.y = y;
+}
+
+ImageDragger.prototype.setNewBackgroundPos = function(x, y) {
+  this.background.newPos.x = x;
+  this.background.newPos.y = y;
+}
+
+ImageDragger.prototype.resetNewBackgroundPos = function() {
+  this.background.newPos.x = null;
+  this.background.newPos.y = null;
+}
+
+// end ImageDragger Class
+
 //DOM HANDLES
 
 const canvas = document.querySelector('#canvas');
@@ -54,8 +86,7 @@ function startDrag(e) {
   imageDragger.dragging = true;
 
   // set drag start point to click location
-  imageDragger.cursor.oldPos.x = e.offsetX;
-  imageDragger.cursor.oldPos.y = e.offsetY;
+  imageDragger.setOldCursorPos(e.offsetX, e.offsetY);
 }
 
 function stopDrag(e) {
@@ -64,19 +95,15 @@ function stopDrag(e) {
   imageDragger.dragging = false;
 
   // set drag start point to null
-  imageDragger.cursor.oldPos.x = null;
-  imageDragger.cursor.oldPos.y = null;
+  imageDragger.resetOldCursorPos();
 }
 
 function dragBackground(e) {
   // set the new pos
-  const newPos = {
-    x: e.offsetX,
-    y: e.offsetY,
-  };
+  imageDragger.setNewCursorPos(e.offsetX, e.offsetY);
 
   // use the newpos to get the drag delta of the cursor
-  const cursorDelta = getCursorDelta(newPos);
+  const cursorDelta = getCursorDelta(imageDragger.background.newPos);
 
   // move the background by the same delta
   moveBackground(cursorDelta);
@@ -121,15 +148,20 @@ function moveBackground(delta) {
   const newX = lastPos.x + delta.x;
   const newY = lastPos.y + delta.y;
 
-  // update background lastpos
-  imageDragger.background.oldPos.x = newX;
-  imageDragger.background.oldPos.y = newY;
+  // set new background pos
+  imageDragger.setNewBackgroundPos(newX, newY);
 
   // clear the background
   clearCanvas();
 
   // redraw the background
   ctx.drawImage(backgroundImg, newX, newY);
+
+  // update background lastpos
+  imageDragger.setOldBackgroundPos(newX, newY);
+
+  // reset new pos to null
+  imageDragger.resetNewBackgroundpos();
 }
 
 function clearCanvas() {
