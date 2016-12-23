@@ -119,6 +119,7 @@ ctx.fillStyle = '#D00';
 canvas.addEventListener('mousedown', startDrag);
 canvas.addEventListener('mouseup', stopDrag);
 canvas.addEventListener('mousemove', paintSquare);
+canvas.addEventListener('mousemove', dragBackground);
 downloadLink.addEventListener('click', saveImage);
 
 //EVENT HANDLERS
@@ -131,25 +132,28 @@ function startDrag(e) {
 }
 
 function stopDrag(e) {
-  dragBackground(e);
+  // dragBackground(e);
 
   imageDragger.dragging = false;
 
   // set drag start point to null
   imageDragger.resetOldCursorPos();
   imageDragger.resetNewCursorPos();
+
+  imageDragger.migrateBackgroundPos();
 }
 
 function dragBackground(e) {
   // set the new pos
   imageDragger.setNewCursorPos(e.offsetX, e.offsetY);
 
-  // use the cursor delta to generate a new background pos
-  imageDragger.generateNewBackgroundPos();
+  if (imageDragger.dragging) {
+    // use the cursor delta to generate a new background pos
+    imageDragger.generateNewBackgroundPos();
 
-  redrawBackground();
+    redrawBackground();
+  }
 
-  imageDragger.migrateBackgroundPos();
 }
 
 function paintSquare(e) {
