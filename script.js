@@ -138,15 +138,15 @@ const downloadLink = document.querySelector('#download-link');
 
 //EVENT BINDINGS
 
-canvas.addEventListener('mousedown', dragBegin);
-canvas.addEventListener('mousemove', drag);
-canvas.addEventListener('mouseup', dragEnd);
+canvas.addEventListener('mousedown', handleDragBegin);
+canvas.addEventListener('mousemove', handleDrag);
+canvas.addEventListener('mouseup', handleDragEnd);
 
 downloadLink.addEventListener('click', saveImage);
 
 //EVENT HANDLERS
 
-function dragBegin(e) {
+function handleDragBegin(e) {
   const cursorX = e.offsetX;
   const cursorY = e.offsetY;
 
@@ -154,14 +154,14 @@ function dragBegin(e) {
   imageDragger.dragBegin(cursorX, cursorY);
 }
 
-function drag(e) {
+function handleDrag(e) {
   const currentX = e.offsetX;
   const currentY = e.offsetY;
 
   imageDragger.drag(currentX, currentY);
 }
 
-function dragEnd() {
+function handleDragEnd() {
   imageDragger.dragEnd();
 }
 
