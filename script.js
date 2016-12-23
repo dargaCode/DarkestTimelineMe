@@ -141,6 +141,7 @@ const downloadLink = document.querySelector('#download-link');
 canvas.addEventListener('mousedown', handleDragBegin);
 canvas.addEventListener('mousemove', handleDrag);
 canvas.addEventListener('mouseup', handleDragEnd);
+canvas.addEventListener('mouseout', handleDragEnd);
 
 downloadLink.addEventListener('click', saveImage);
 
