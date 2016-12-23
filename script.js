@@ -48,6 +48,11 @@ ImageDragger.prototype.setNewCursorPos = function(x, y) {
   this.cursor.newPos.y = y;
 }
 
+ImageDragger.prototype.resetNewCursorPos = function(x, y) {
+  this.cursor.newPos.x = null;
+  this.cursor.newPos.y = null;
+}
+
 ImageDragger.prototype.setOldBackgroundPos = function(x, y) {
   this.background.oldPos.x = x;
   this.background.oldPos.y = y;
@@ -132,6 +137,7 @@ function stopDrag(e) {
 
   // set drag start point to null
   imageDragger.resetOldCursorPos();
+  imageDragger.resetNewCursorPos();
 }
 
 function dragBackground(e) {
