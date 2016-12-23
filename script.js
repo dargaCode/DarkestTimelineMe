@@ -79,7 +79,7 @@ ImageDragger.prototype.drag = function(currentX, currentY) {
   // background only moves if a drag is in progress
   if (this.dragging) {
     this.generateNewBackgroundPos();
-    redrawBackground();
+    drawBackground();
   }
 }
 
@@ -167,7 +167,7 @@ function dragEnd() {
 
 //HELPER FUNCTIONS
 
-function redrawBackground() {
+function drawBackground() {
   const newPos = imageDragger.background.newPos;
 
   // clear the background
