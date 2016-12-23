@@ -6,8 +6,8 @@ const MIDPOINT = SHAPE_WIDTH / 2;
 
 // CLASSES
 
-  // BACKGROUND DRAGGER
-function BackgroundDragger() {
+  // IMAGE DRAGGER
+function ImageDragger() {
   this.dragging = false;
   this.cursor = {
     oldPos: {
@@ -51,21 +51,21 @@ downloadLink.addEventListener('click', saveImage);
 //EVENT HANDLERS
 
 function startDrag(e) {
-  backgroundDragger.dragging = true;
+  imageDragger.dragging = true;
 
   // set drag start point to click location
-  backgroundDragger.cursor.oldPos.x = e.offsetX;
-  backgroundDragger.cursor.oldPos.y = e.offsetY;
+  imageDragger.cursor.oldPos.x = e.offsetX;
+  imageDragger.cursor.oldPos.y = e.offsetY;
 }
 
 function stopDrag(e) {
   dragBackground(e);
 
-  backgroundDragger.dragging = false;
+  imageDragger.dragging = false;
 
   // set drag start point to null
-  backgroundDragger.cursor.oldPos.x = null;
-  backgroundDragger.cursor.oldPos.y = null;
+  imageDragger.cursor.oldPos.x = null;
+  imageDragger.cursor.oldPos.y = null;
 }
 
 function dragBackground(e) {
@@ -84,7 +84,7 @@ function dragBackground(e) {
 
 function getCursorDelta(newPos) {
   // get lastPos from constant
-  const lastPos = backgroundDragger.cursor.oldPos;
+  const lastPos = imageDragger.cursor.oldPos;
 
   // subtract newpos from lastPos
   const delta = {
@@ -102,7 +102,7 @@ function paintSquare(e) {
   const shapeX = clickX - MIDPOINT;
   const shapeY = clickY - MIDPOINT;
 
-  if (backgroundDragger.dragging) {
+  if (imageDragger.dragging) {
     ctx.fillRect(shapeX, shapeY, SHAPE_WIDTH, SHAPE_WIDTH);
   }
 }
@@ -115,15 +115,15 @@ function saveImage() {
 
 function moveBackground(delta) {
   // get last position from constant
-  const lastPos = backgroundDragger.background.oldPos;
+  const lastPos = imageDragger.background.oldPos;
 
   // add delta to those numbers
   const newX = lastPos.x + delta.x;
   const newY = lastPos.y + delta.y;
 
   // update background lastpos
-  backgroundDragger.background.oldPos.x = newX;
-  backgroundDragger.background.oldPos.y = newY;
+  imageDragger.background.oldPos.x = newX;
+  imageDragger.background.oldPos.y = newY;
 
   // clear the background
   clearCanvas();
@@ -150,4 +150,4 @@ backgroundImg.addEventListener("load", function() {
 backgroundImg.src = 'background.jpg';
 
 // instantiate class
-const backgroundDragger = new BackgroundDragger();
+const imageDragger = new ImageDragger();
