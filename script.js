@@ -157,10 +157,6 @@ function paintSquare(e) {
   }
 }
 
-function saveImage() {
-  this.href = canvas.toDataURL('image/png');
-}
-
 //HELPER FUNCTIONS
 
 function redrawBackground() {
@@ -178,6 +174,10 @@ function clearCanvas() {
   const height = canvas.height;
 
   ctx.clearRect(0, 0, width, height);
+}
+
+function saveImage() {
+  this.href = canvas.toDataURL('image/png');
 }
 
 // MAIN
