@@ -65,6 +65,16 @@ ImageDragger.prototype.resetNewBackgroundPos = function() {
 
   // helper methods
 
+ImageDragger.prototype.generateNewBackgroundPos = function() {
+  const oldPos = this.background.oldPos;
+  const delta = this.generateCursorDelta();
+
+  const newX = oldPos.x + delta.x;
+  const newY = oldPos.y + delta.y;
+
+  this.setNewBackgroundPos(newX, newY);
+}
+
 ImageDragger.prototype.generateCursorDelta = function() {
   // subtract newpos from lastPos
   const delta = {
@@ -153,15 +163,7 @@ function saveImage() {
 //HELPER FUNCTIONS
 
 function moveBackground(delta) {
-  // get last position from constant
-  const lastPos = imageDragger.background.oldPos;
-
-  // add delta to those numbers
-  const newX = lastPos.x + delta.x;
-  const newY = lastPos.y + delta.y;
-
-  // set new background pos
-  imageDragger.setNewBackgroundPos(newX, newY);
+  imageDragger.generateNewBackgroundPos();
 
   redrawBackground();
 
