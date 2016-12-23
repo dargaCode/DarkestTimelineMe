@@ -6,7 +6,7 @@ const MIDPOINT = SHAPE_WIDTH / 2;
 
 // CLASSES
 
-  // IMAGE DRAGGER
+// IMAGE DRAGGER
 function ImageDragger() {
   this.dragging = false;
   this.cursor = {
@@ -30,6 +30,8 @@ function ImageDragger() {
     },
   };
 }
+
+  // setters
 
 ImageDragger.prototype.setOldCursorPos = function(x, y) {
   this.cursor.oldPos.x = x;
