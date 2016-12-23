@@ -151,17 +151,23 @@ function moveBackground(delta) {
   // set new background pos
   imageDragger.setNewBackgroundPos(newX, newY);
 
-  // clear the background
-  clearCanvas();
-
-  // redraw the background
-  ctx.drawImage(backgroundImg, newX, newY);
+  redrawBackground();
 
   // update background lastpos
   imageDragger.setOldBackgroundPos(newX, newY);
 
   // reset new pos to null
   imageDragger.resetNewBackgroundPos();
+}
+
+function redrawBackground() {
+  const newPos = imageDragger.background.newPos;
+
+  // clear the background
+  clearCanvas();
+
+  // redraw the background
+  ctx.drawImage(backgroundImg, newPos.x, newPos.y);
 }
 
 function clearCanvas() {
