@@ -128,7 +128,7 @@ ImageDragger.prototype.migrateBackgroundPos = function() {
   this.resetNewBackgroundPos();
 }
 
-// end ImageDragger Class
+// end IMAGEDRAGGER Class
 
 //DOM HANDLES
 
