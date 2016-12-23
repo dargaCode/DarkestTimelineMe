@@ -22,6 +22,33 @@ const BACKGROUND = {
   }
 }
 
+// CLASSES
+
+  // BACKGROUND DRAGGER
+function BackgroundDragger() {
+  this.dragging = false;
+  this.cursor = {
+    oldPos: {
+      x: null,
+      y: null,
+    },
+    newPos: {
+      x: null,
+      y: null,
+    },
+  };
+  this.background = {
+    oldPos: {
+      x: null,
+      y: null,
+    },
+    newPos: {
+      x: null,
+      y: null,
+    },
+  };
+}
+
 //DOM HANDLES
 
 const canvas = document.querySelector('#canvas');
@@ -139,3 +166,6 @@ backgroundImg.addEventListener("load", function() {
 }, false);
 
 backgroundImg.src = 'background.jpg';
+
+// instantiate class
+const backgroundDragger = new BackgroundDragger();
