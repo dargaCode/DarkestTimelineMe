@@ -45,7 +45,7 @@ ctx.fillStyle = '#D00';
 
 canvas.addEventListener('mousedown', startDrag);
 canvas.addEventListener('mouseup', stopDrag);
-canvas.addEventListener('mousemove', paint);
+canvas.addEventListener('mousemove', paintSquare);
 downloadLink.addEventListener('click', saveImage);
 
 //EVENT HANDLERS
@@ -96,7 +96,7 @@ function getCursorDelta(newPos) {
   return delta;
 }
 
-function paint(e) {
+function paintSquare(e) {
   const clickX = e.offsetX;
   const clickY = e.offsetY;
   const shapeX = clickX - MIDPOINT;
