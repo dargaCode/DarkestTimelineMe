@@ -103,10 +103,14 @@ ImageDragger.prototype.generateNewBackgroundPos = function() {
   const oldPos = this.background.oldPos;
   const delta = this.generateCursorDelta();
 
-  const newX = oldPos.x + delta.x;
-  const newY = oldPos.y + delta.y;
+  const proposedX = oldPos.x + delta.x;
+  const proposedY = oldPos.y + delta.y;
 
-  this.setNewBackgroundPos(newX, newY);
+  // validate x and y to make sure whitespace doesn't show behind the background
+  const validX = this.validateBackgroundPosX(proposedX);
+  const validY = this.validateBackgroundPosY(proposedY);
+
+  this.setNewBackgroundPos(validX, validY);
 }
 
 ImageDragger.prototype.generateCursorDelta = function() {
@@ -118,6 +122,32 @@ ImageDragger.prototype.generateCursorDelta = function() {
 
   // return delta object
   return delta;
+}
+
+ImageDragger.prototype.validateBackgroundPosX = function(x) {
+  const maxX = 0;
+  const minX = canvas.width - backgroundImg.width;
+
+  // lock image to the left canvas edge
+  x = Math.min(x, maxX);
+
+  // lock image to the right canvas edge
+  x = Math.max(x, minX);
+
+  return x;
+}
+
+ImageDragger.prototype.validateBackgroundPosY = function(y) {
+  const maxY = 0;
+  const minY = canvas.height - backgroundImg.height;
+
+  // lock image to the top canvas edge
+  y = Math.min(y, maxY);
+
+  // lock image to the bottom canvas edge
+  y = Math.max(y, minY);
+
+  return y;
 }
 
 // allows the image to be repeatedly dragged
