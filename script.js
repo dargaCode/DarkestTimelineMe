@@ -17,6 +17,7 @@ function ImageDragger() {
     },
   };
   this.background = {
+    image: null,
     oldPos: {
       x: null,
       y: null,
@@ -25,10 +26,29 @@ function ImageDragger() {
       x: 0,
       y: 0,
     },
+    minPos: {
+      x: null,
+      y: null,
+    },
+    maxPos: {
+      x: 0,
+      y: 0,
+    }
   };
 }
 
   // setters
+
+ImageDragger.prototype.setBackgroundImage = function(image) {
+  this.background.image = image;
+  this.setBackgroundMinPos(image);
+}
+
+// use the image size to lock how far it can pan left/up without showing whitespace behind it
+ImageDragger.prototype.setBackgroundMinPos = function(image) {
+  this.background.minPos.x = canvas.width - image.width;
+  this.background.minPos.y = canvas.height - image.height;
+}
 
 ImageDragger.prototype.setOldCursorPos = function(x, y) {
   this.cursor.oldPos.x = x;
@@ -232,3 +252,5 @@ const backgroundImg = new Image();
 backgroundImg.addEventListener("load", drawBackground);
 
 backgroundImg.src = 'background.jpg';
+
+imageDragger.setBackgroundImage(backgroundImg);
