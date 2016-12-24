@@ -50,6 +50,24 @@ ImageDragger.prototype.setBackgroundMinPos = function(image) {
   this.background.minPos.y = canvas.height - image.height;
 }
 
+ImageDragger.prototype.setOldBackgroundPos = function(x, y) {
+  this.background.oldPos.x = x;
+  this.background.oldPos.y = y;
+}
+
+ImageDragger.prototype.setNewBackgroundPos = function(x, y) {
+  // validate x and y to make sure whitespace doesn't show behind the background
+  const validatedPos = this.validateBackgroundPos(x, y);
+
+  this.background.newPos.x = validatedPos.x;
+  this.background.newPos.y = validatedPos.y;
+}
+
+ImageDragger.prototype.resetNewBackgroundPos = function() {
+  this.background.newPos.x = 0;
+  this.background.newPos.y = 0;
+}
+
 ImageDragger.prototype.setOldCursorPos = function(x, y) {
   this.cursor.oldPos.x = x;
   this.cursor.oldPos.y = y;
@@ -68,24 +86,6 @@ ImageDragger.prototype.setNewCursorPos = function(x, y) {
 ImageDragger.prototype.resetNewCursorPos = function(x, y) {
   this.cursor.newPos.x = null;
   this.cursor.newPos.y = null;
-}
-
-ImageDragger.prototype.setOldBackgroundPos = function(x, y) {
-  this.background.oldPos.x = x;
-  this.background.oldPos.y = y;
-}
-
-ImageDragger.prototype.setNewBackgroundPos = function(x, y) {
-  // validate x and y to make sure whitespace doesn't show behind the background
-  const validatedPos = this.validateBackgroundPos(x, y);
-
-  this.background.newPos.x = validatedPos.x;
-  this.background.newPos.y = validatedPos.y;
-}
-
-ImageDragger.prototype.resetNewBackgroundPos = function() {
-  this.background.newPos.x = 0;
-  this.background.newPos.y = 0;
 }
 
   // methods
