@@ -76,8 +76,11 @@ ImageDragger.prototype.setOldBackgroundPos = function(x, y) {
 }
 
 ImageDragger.prototype.setNewBackgroundPos = function(x, y) {
-  this.background.newPos.x = x;
-  this.background.newPos.y = y;
+  // validate x and y to make sure whitespace doesn't show behind the background
+  const validatedPos = this.validateBackgroundPos(x, y);
+
+  this.background.newPos.x = validatedPos.x;
+  this.background.newPos.y = validatedPos.y;
 }
 
 ImageDragger.prototype.resetNewBackgroundPos = function() {
@@ -123,14 +126,10 @@ ImageDragger.prototype.generateNewBackgroundPos = function() {
   const oldPos = this.background.oldPos;
   const delta = this.generateCursorDelta();
 
-  const proposedX = oldPos.x + delta.x;
-  const proposedY = oldPos.y + delta.y;
+  const newX = oldPos.x + delta.x;
+  const newY = oldPos.y + delta.y;
 
-  // validate x and y to make sure whitespace doesn't show behind the background
-  const validX = this.validateBackgroundPosX(proposedX);
-  const validY = this.validateBackgroundPosY(proposedY);
-
-  this.setNewBackgroundPos(validX, validY);
+  this.setNewBackgroundPos(newX, newY);
 }
 
 ImageDragger.prototype.generateCursorDelta = function() {
@@ -144,30 +143,32 @@ ImageDragger.prototype.generateCursorDelta = function() {
   return delta;
 }
 
-ImageDragger.prototype.validateBackgroundPosX = function(x) {
-  const maxX = 0;
-  const minX = canvas.width - backgroundImg.width;
+ImageDragger.prototype.validateBackgroundPos = function(x, y) {
+  const minPos = this.background.minPos;
+  const maxPos = this.background.maxPos;
 
-  // lock image to the left canvas edge
-  x = Math.min(x, maxX);
+  const result = {};
 
-  // lock image to the right canvas edge
-  x = Math.max(x, minX);
+  // validate x
+  if (x > maxPos.x) {
+    x = maxPos.x;
+  }
+  if (x < minPos.x) {
+    x = minPos.x;
+  }
 
-  return x;
-}
+  // validate y
+  if (y > maxPos.y) {
+    y = maxPos.y;
+  }
+  if (y < minPos.y) {
+    y = minPos.y;
+  }
 
-ImageDragger.prototype.validateBackgroundPosY = function(y) {
-  const maxY = 0;
-  const minY = canvas.height - backgroundImg.height;
+  result.x = x;
+  result.y = y;
 
-  // lock image to the top canvas edge
-  y = Math.min(y, maxY);
-
-  // lock image to the bottom canvas edge
-  y = Math.max(y, minY);
-
-  return y;
+  return result;
 }
 
 // allows the image to be repeatedly dragged
