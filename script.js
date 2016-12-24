@@ -61,8 +61,8 @@ ImageDragger.prototype.setNewBackgroundPos = function(x, y) {
 }
 
 ImageDragger.prototype.resetNewBackgroundPos = function() {
-  this.background.newPos.x = null;
-  this.background.newPos.y = null;
+  this.background.newPos.x = 0;
+  this.background.newPos.y = 0;
 }
 
   // methods
