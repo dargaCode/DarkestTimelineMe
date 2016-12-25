@@ -102,7 +102,7 @@ ImageDragger.prototype.drag = function(currentX, currentY) {
   // background only moves if a drag is in progress
   if (this.dragging) {
     this.generateNewBackgroundPos();
-    drawBackground();
+    display.drawBackground();
   }
 }
 
@@ -184,10 +184,35 @@ ImageDragger.prototype.migrateBackgroundPos = function() {
 
 // end ImageDragger Class
 
+// Display class
+
+function Display(canvas) {
+  this.canvas = canvas;
+  this.context = canvas.getContext('2d');
+}
+
+Display.prototype.drawBackground = function() {
+  const newPos = imageDragger.background.newPos;
+
+  // clear the background
+  display.clearCanvas();
+
+  // redraw the background
+  display.context.drawImage(backgroundImg, newPos.x, newPos.y);
+}
+
+Display.prototype.clearCanvas = function() {
+  const width = canvas.width;
+  const height = canvas.height;
+
+  display.context.clearRect(0, 0, width, height);
+}
+
+// end Display class
+
 //DOM HANDLES
 
 const canvas = document.querySelector('#canvas');
-const ctx = canvas.getContext('2d');
 const downloadLink = document.querySelector('#download-link');
 
 //EVENT BINDINGS
@@ -222,23 +247,6 @@ function handleDragEnd() {
 
 //HELPER FUNCTIONS
 
-function drawBackground() {
-  const newPos = imageDragger.background.newPos;
-
-  // clear the background
-  clearCanvas();
-
-  // redraw the background
-  ctx.drawImage(backgroundImg, newPos.x, newPos.y);
-}
-
-function clearCanvas() {
-  const width = canvas.width;
-  const height = canvas.height;
-
-  ctx.clearRect(0, 0, width, height);
-}
-
 function saveImage() {
   this.href = canvas.toDataURL('image/png');
 }
@@ -248,9 +256,11 @@ function saveImage() {
 // instantiate class
 const imageDragger = new ImageDragger();
 
+const display = new Display(canvas);
+
 const backgroundImg = new Image();
 
-backgroundImg.addEventListener("load", drawBackground);
+backgroundImg.addEventListener("load", display.drawBackground);
 
 backgroundImg.src = 'background.jpg';
 
