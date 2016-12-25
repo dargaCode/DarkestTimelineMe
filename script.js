@@ -4,6 +4,7 @@
 // CLASSES
 
 // ImageDragger Class
+
 function ImageDragger() {
   this.dragging = false;
   this.cursor = {
