@@ -181,9 +181,6 @@ ImageDragger.prototype.migrateBackgroundPos = function() {
 
   // move new pos to old pos
   this.setOldBackgroundPos(newPos.x, newPos.y);
-
-  // reset new pos to nulls
-  this.resetNewBackgroundPos();
 }
 
 // end ImageDragger Class
