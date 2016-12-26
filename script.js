@@ -5,7 +5,8 @@
 
 // ImageDragger Class
 
-function ImageDragger() {
+function ImageDragger(display) {
+  this.display = display;
   this.dragging = false;
   this.cursor = {
     oldPos: {
@@ -63,7 +64,7 @@ ImageDragger.prototype.setNewBackgroundPos = function(x, y) {
 
   this.background.newPos.x = validatedPos.x;
   this.background.newPos.y = validatedPos.y;
-  display.drawBackground();
+  this.display.drawBackground(this.background);
 }
 
 ImageDragger.prototype.resetNewBackgroundPos = function() {
@@ -187,14 +188,16 @@ function Display(canvas) {
   this.context = canvas.getContext('2d');
 }
 
-Display.prototype.drawBackground = function() {
-  const newPos = imageDragger.background.newPos;
+Display.prototype.drawBackground = function(background) {
+  const backgroundImage = background.image;
+  const x = background.newPos.x;
+  const y = background.newPos.y;
 
   // clear the background
   this.clearCanvas();
 
   // redraw the background
-  this.context.drawImage(backgroundImg, newPos.x, newPos.y);
+  this.context.drawImage(backgroundImage, x, y);
 }
 
 Display.prototype.clearCanvas = function() {
@@ -250,9 +253,8 @@ function saveImage() {
 //MAIN
 
 // instantiate class
-const imageDragger = new ImageDragger();
-
 const display = new Display(canvas);
+const imageDragger = new ImageDragger(display);
 
 const backgroundImg = new Image();
 
