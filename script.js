@@ -67,9 +67,7 @@ ImageDragger.prototype.setNewBackgroundPos = function(x, y) {
 }
 
 ImageDragger.prototype.resetNewBackgroundPos = function() {
-  this.background.newPos.x = 0;
-  this.background.newPos.y = 0;
-  display.drawBackground();
+  this.setNewBackgroundPos(0, 0);
 }
 
 ImageDragger.prototype.setOldCursorPos = function(x, y) {
@@ -78,8 +76,7 @@ ImageDragger.prototype.setOldCursorPos = function(x, y) {
 }
 
 ImageDragger.prototype.resetOldCursorPos = function() {
-  this.cursor.oldPos.x = null;
-  this.cursor.oldPos.y = null;
+  this.setOldCursorPos(null, null);
 }
 
 ImageDragger.prototype.setNewCursorPos = function(x, y) {
@@ -87,9 +84,8 @@ ImageDragger.prototype.setNewCursorPos = function(x, y) {
   this.cursor.newPos.y = y;
 }
 
-ImageDragger.prototype.resetNewCursorPos = function(x, y) {
-  this.cursor.newPos.x = null;
-  this.cursor.newPos.y = null;
+ImageDragger.prototype.resetNewCursorPos = function() {
+  this.setNewCursorPos(null, null);
 }
 
   // methods
