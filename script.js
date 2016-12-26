@@ -43,6 +43,7 @@ function ImageDragger() {
 ImageDragger.prototype.setBackgroundImage = function(image) {
   this.background.image = image;
   this.setBackgroundMinPos(image);
+  this.resetNewBackgroundPos();
 }
 
 // use the image size to lock how far it can pan left/up without showing whitespace behind it
@@ -62,11 +63,13 @@ ImageDragger.prototype.setNewBackgroundPos = function(x, y) {
 
   this.background.newPos.x = validatedPos.x;
   this.background.newPos.y = validatedPos.y;
+  display.drawBackground();
 }
 
 ImageDragger.prototype.resetNewBackgroundPos = function() {
   this.background.newPos.x = 0;
   this.background.newPos.y = 0;
+  display.drawBackground();
 }
 
 ImageDragger.prototype.setOldCursorPos = function(x, y) {
@@ -196,17 +199,17 @@ Display.prototype.drawBackground = function() {
   const newPos = imageDragger.background.newPos;
 
   // clear the background
-  display.clearCanvas();
+  this.clearCanvas();
 
   // redraw the background
-  display.context.drawImage(backgroundImg, newPos.x, newPos.y);
+  this.context.drawImage(backgroundImg, newPos.x, newPos.y);
 }
 
 Display.prototype.clearCanvas = function() {
   const width = canvas.width;
   const height = canvas.height;
 
-  display.context.clearRect(0, 0, width, height);
+  this.context.clearRect(0, 0, width, height);
 }
 
 // end Display class
@@ -261,8 +264,8 @@ const display = new Display(canvas);
 
 const backgroundImg = new Image();
 
-backgroundImg.addEventListener("load", display.drawBackground);
+backgroundImg.addEventListener("load", function() {
+  imageDragger.setBackgroundImage(this);
+});
 
 backgroundImg.src = 'background.jpg';
-
-imageDragger.setBackgroundImage(backgroundImg);
