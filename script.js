@@ -226,6 +226,8 @@ Display.prototype.clearCanvas = function() {
 //DOM HANDLES
 
 const canvas = document.querySelector('#canvas');
+const fileInput = document.querySelector('#file-input');
+const browseLink = document.querySelector('#browse-link');
 const downloadLink = document.querySelector('#download-link');
 
 //EVENT BINDINGS
@@ -234,6 +236,19 @@ canvas.addEventListener('mousedown', handleDragBegin);
 canvas.addEventListener('mousemove', handleDrag);
 canvas.addEventListener('mouseup', handleDragEnd);
 canvas.addEventListener('mouseout', handleDragEnd);
+
+fileInput.addEventListener('change', function() {
+  handleFiles(this.files);
+});
+
+browseLink.addEventListener('click', function (e) {
+  // transfer click from browse link to file input, so that ugly file input element can be hidden and replaced with button.
+  if (fileInput) {
+    fileInput.click();
+  }
+  // prevent navigation to "#"
+  e.preventDefault();
+});
 
 downloadLink.addEventListener('click', saveImage);
 
@@ -259,6 +274,10 @@ function handleDragEnd() {
 }
 
 //HELPER FUNCTIONS
+
+function handleFiles(files) {
+  console.log('FILE BROWSED:', files[0].name);
+}
 
 function saveImage() {
   this.href = canvas.toDataURL('image/png');

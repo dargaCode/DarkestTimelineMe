@@ -12,12 +12,15 @@ canvas {
   cursor: pointer;
 }
 
-.download-link {
-  color: blue;
+a {
   display: block;
+  color: #d8d8d8;
+  font-size: 17px;
+  text-decoration: none;
   cursor: pointer;
+  margin-top: 10px;
 }
 
-.download-link:hover {
+a:hover {
   text-decoration: underline;
 }
