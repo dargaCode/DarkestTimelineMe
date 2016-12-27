@@ -1,6 +1,8 @@
 
 //CONSTANTS
 
+const DEFAULT_BACKGROUND_PATH = 'background.jpg'
+
 // CLASSES
 
 // ImageDragger Class
@@ -40,6 +42,18 @@ function ImageDragger(display) {
 }
 
   // setters
+
+ImageDragger.prototype.loadBackgroundImage = function(path) {
+  // need to have access to the ImageDragger and the loaded Image at the same time.
+  const self = this;
+  const backgroundImg = new Image();
+
+  backgroundImg.addEventListener("load", function() {
+    self.setBackgroundImage(this);
+  });
+
+  backgroundImg.src = path;
+}
 
 ImageDragger.prototype.setBackgroundImage = function(image) {
   this.background.image = image;
@@ -256,10 +270,4 @@ function saveImage() {
 const display = new Display(canvas);
 const imageDragger = new ImageDragger(display);
 
-const backgroundImg = new Image();
-
-backgroundImg.addEventListener("load", function() {
-  imageDragger.setBackgroundImage(this);
-});
-
-backgroundImg.src = 'background.jpg';
+imageDragger.loadBackgroundImage(DEFAULT_BACKGROUND_PATH);
