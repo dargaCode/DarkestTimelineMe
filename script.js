@@ -243,7 +243,7 @@ canvas.addEventListener('mouseup', handleDragEnd);
 canvas.addEventListener('mouseout', handleDragEnd);
 
 fileInput.addEventListener('change', function() {
-  handleFiles(this.files);
+  loadImage(this.files);
 });
 
 browseLink.addEventListener('click', function (e) {
@@ -280,7 +280,7 @@ function handleDragEnd() {
 
 //HELPER FUNCTIONS
 
-function handleFiles(files) {
+function loadImage(files) {
   const imageFile = files[0];
   const imageURL = URL.createObjectURL(imageFile);
 
