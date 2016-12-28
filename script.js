@@ -11,24 +11,24 @@ function ImageDragger(display) {
   this.display = display;
   this.dragging = false;
   this.cursor = {
-    oldPos: {
+    position: {
       x: null,
       y: null,
     },
-    newPos: {
+    lastPosition: {
       x: null,
       y: null,
     },
   };
   this.background = {
     image: null,
-    oldPos: {
-      x: null,
-      y: null,
-    },
-    newPos: {
+    position: {
       x: 0,
       y: 0,
+    },
+    lastPosition: {
+      x: null,
+      y: null,
     },
     minPos: {
       x: null,
@@ -58,8 +58,8 @@ ImageDragger.prototype.loadBackgroundImage = function(path) {
 ImageDragger.prototype.setBackgroundImage = function(image) {
   this.background.image = image;
   this.setBackgroundMinPos(image);
-  this.resetOldBackgroundPos();
-  this.resetNewBackgroundPos();
+  this.resetBackgroundLastPos();
+  this.resetBackgroundPos();
 }
 
 // use the image size to lock how far it can pan left/up without showing whitespace behind it
@@ -68,56 +68,55 @@ ImageDragger.prototype.setBackgroundMinPos = function(image) {
   this.background.minPos.y = canvas.height - image.height;
 }
 
-ImageDragger.prototype.setOldBackgroundPos = function(x, y) {
-  this.background.oldPos.x = x;
-  this.background.oldPos.y = y;
+ImageDragger.prototype.setBackgroundLastPos = function(x, y) {
+  this.background.lastPosition.x = x;
+  this.background.lastPosition.y = y;
 }
 
-ImageDragger.prototype.setNewBackgroundPos = function(x, y) {
+ImageDragger.prototype.setBackgroundPos = function(x, y) {
   // validate x and y to make sure whitespace doesn't show behind the background
   const validatedPos = this.validateBackgroundPos(x, y);
 
-  this.background.newPos.x = validatedPos.x;
-  this.background.newPos.y = validatedPos.y;
+  this.background.position.x = validatedPos.x;
+  this.background.position.y = validatedPos.y;
   this.display.drawBackground(this.background);
 }
 
-ImageDragger.prototype.resetOldBackgroundPos = function() {
-  this.setOldBackgroundPos(0, 0);
+ImageDragger.prototype.resetBackgroundLastPos = function() {
+  this.setBackgroundLastPos(0, 0);
 }
 
-ImageDragger.prototype.resetNewBackgroundPos = function() {
-  this.setNewBackgroundPos(0, 0);
+ImageDragger.prototype.resetBackgroundPos = function() {
+  this.setBackgroundPos(0, 0);
 }
 
-ImageDragger.prototype.setOldCursorPos = function(x, y) {
-  this.cursor.oldPos.x = x;
-  this.cursor.oldPos.y = y;
+ImageDragger.prototype.setCursorLastPos = function(x, y) {
+  this.cursor.lastPosition.x = x;
+  this.cursor.lastPosition.y = y;
 }
 
-ImageDragger.prototype.resetOldCursorPos = function() {
-  this.setOldCursorPos(null, null);
+ImageDragger.prototype.resetCursorLastPos = function() {
+  this.setCursorLastPos(null, null);
 }
 
-ImageDragger.prototype.setNewCursorPos = function(x, y) {
-  this.cursor.newPos.x = x;
-  this.cursor.newPos.y = y;
+ImageDragger.prototype.setCursorPos = function(x, y) {
+  this.cursor.position.x = x;
+  this.cursor.position.y = y;
 }
 
-ImageDragger.prototype.resetNewCursorPos = function() {
-  this.setNewCursorPos(null, null);
+ImageDragger.prototype.resetCursorPos = function() {
+  this.setCursorPos(null, null);
 }
 
   // methods
 
 ImageDragger.prototype.dragBegin = function(startX, startY) {
   this.dragging = true;
-  this.setOldCursorPos(startX, startY);
+  this.setCursorLastPos(startX, startY);
 }
 
 ImageDragger.prototype.drag = function(currentX, currentY) {
-  // set the new pos
-  this.setNewCursorPos(currentX, currentY);
+  this.setCursorPos(currentX, currentY);
 
   // background only moves if a drag is in progress
   if (this.dragging) {
@@ -131,8 +130,8 @@ ImageDragger.prototype.dragEnd = function() {
     this.dragging = false;
 
     // reset unneeded data
-    this.resetOldCursorPos();
-    this.resetNewCursorPos();
+    this.resetCursorLastPos();
+    this.resetCursorPos();
 
     // prepare background pos for next drag
     this.migrateBackgroundPos();
@@ -142,20 +141,20 @@ ImageDragger.prototype.dragEnd = function() {
   // helper methods
 
 ImageDragger.prototype.generateNewBackgroundPos = function() {
-  const oldPos = this.background.oldPos;
+  const lastPosition = this.background.lastPosition;
   const delta = this.generateCursorDelta();
 
-  const newX = oldPos.x + delta.x;
-  const newY = oldPos.y + delta.y;
+  const newX = lastPosition.x + delta.x;
+  const newY = lastPosition.y + delta.y;
 
-  this.setNewBackgroundPos(newX, newY);
+  this.setBackgroundPos(newX, newY);
 }
 
 ImageDragger.prototype.generateCursorDelta = function() {
-  // subtract newpos from lastPos
+  // subtract pos from lastPos
   const delta = {
-    x: this.cursor.newPos.x - this.cursor.oldPos.x,
-    y: this.cursor.newPos.y - this.cursor.oldPos.y,
+    x: this.cursor.position.x - this.cursor.lastPosition.x,
+    y: this.cursor.position.y - this.cursor.lastPosition.y,
   }
 
   // return delta object
@@ -192,10 +191,10 @@ ImageDragger.prototype.validateBackgroundPos = function(x, y) {
 
 // allows the image to be repeatedly dragged
 ImageDragger.prototype.migrateBackgroundPos = function() {
-  const newPos = this.background.newPos;
+  const position = this.background.position;
 
-  // move new pos to old pos
-  this.setOldBackgroundPos(newPos.x, newPos.y);
+  // copy pos to last pos
+  this.setBackgroundLastPos(position.x, position.y);
 }
 
 // end ImageDragger Class
@@ -209,8 +208,8 @@ function Display(canvas) {
 
 Display.prototype.drawBackground = function(background) {
   const backgroundImage = background.image;
-  const x = background.newPos.x;
-  const y = background.newPos.y;
+  const x = background.position.x;
+  const y = background.position.y;
 
   // clear the background
   this.clearCanvas();
