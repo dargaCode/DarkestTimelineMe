@@ -134,7 +134,7 @@ ImageDragger.prototype.dragEnd = function() {
     this.resetCursorPos();
 
     // prepare background pos for next drag
-    this.migrateBackgroundPos();
+    this.propagateBackgroundPos();
   }
 }
 
@@ -190,7 +190,7 @@ ImageDragger.prototype.validateBackgroundPos = function(x, y) {
 }
 
 // allows the image to be repeatedly dragged
-ImageDragger.prototype.migrateBackgroundPos = function() {
+ImageDragger.prototype.propagateBackgroundPos = function() {
   const position = this.background.position;
 
   // copy pos to last pos
