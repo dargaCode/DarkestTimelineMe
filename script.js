@@ -58,6 +58,7 @@ ImageDragger.prototype.loadBackgroundImage = function(path) {
 ImageDragger.prototype.setBackgroundImage = function(image) {
   this.background.image = image;
   this.setBackgroundMinPos(image);
+  this.resetOldBackgroundPos();
   this.resetNewBackgroundPos();
 }
 
@@ -79,6 +80,10 @@ ImageDragger.prototype.setNewBackgroundPos = function(x, y) {
   this.background.newPos.x = validatedPos.x;
   this.background.newPos.y = validatedPos.y;
   this.display.drawBackground(this.background);
+}
+
+ImageDragger.prototype.resetOldBackgroundPos = function() {
+  this.setOldBackgroundPos(0, 0);
 }
 
 ImageDragger.prototype.resetNewBackgroundPos = function() {
