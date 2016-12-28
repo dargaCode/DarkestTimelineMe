@@ -276,7 +276,10 @@ function handleDragEnd() {
 //HELPER FUNCTIONS
 
 function handleFiles(files) {
-  console.log('FILE BROWSED:', files[0].name);
+  const imageFile = files[0];
+  const imageURL = URL.createObjectURL(imageFile);
+
+  imageDragger.loadBackgroundImage(imageURL);
 }
 
 function saveImage() {
