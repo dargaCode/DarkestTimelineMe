@@ -227,73 +227,100 @@ Display.prototype.clearCanvas = function() {
 
 // end Display class
 
-//DOM HANDLES
+// UserInterface class
 
-const canvas = document.querySelector('#canvas');
-const fileInput = document.querySelector('#file-input');
-const browseLink = document.querySelector('#browse-link');
-const downloadLink = document.querySelector('#download-link');
+function UserInterface(imageDragger) {
+  this.imageDragger = imageDragger;
 
-//EVENT BINDINGS
+  this.canvas = document.querySelector('#canvas');
+  this.fileInput = document.querySelector('#file-input');
+  this.browseLink = document.querySelector('#browse-link');
+  this.downloadLink = document.querySelector('#download-link');
 
-canvas.addEventListener('mousedown', handleDragBegin);
-canvas.addEventListener('mousemove', handleDrag);
-canvas.addEventListener('mouseup', handleDragEnd);
-canvas.addEventListener('mouseout', handleDragEnd);
+  this.addEvents();
+}
 
-fileInput.addEventListener('change', function() {
-  loadImage(this.files);
-});
+UserInterface.prototype.addEvents = function() {
+  // all events need to know about the UI class
+  const self = this;
 
-browseLink.addEventListener('click', function (e) {
-  // transfer click from browse link to file input, so that ugly file input element can be hidden and replaced with button.
-  if (fileInput) {
-    fileInput.click();
-  }
-  // prevent navigation to "#"
-  e.preventDefault();
-});
+  this.canvas.addEventListener('mousedown', function(e) {
+    self.handleDragBegin(e);
+  });
 
-downloadLink.addEventListener('click', saveImage);
+  this.canvas.addEventListener('mousemove', function(e) {
+    self.handleDrag(e);
+  });
 
-//EVENT HANDLERS
+  this.canvas.addEventListener('mouseup', function() {
+    self.handleDragEnd();
+  });
 
-function handleDragBegin(e) {
+  this.canvas.addEventListener('mouseout', function() {
+    self.handleDragEnd();
+  });
+
+  this.fileInput.addEventListener('change', function() {
+    self.loadImage(this.files);
+  });
+
+  this.browseLink.addEventListener('click', function(e) {
+    self.transferClick(e);
+  });
+
+  this.downloadLink.addEventListener('click', function() {
+    self.saveImage(this);
+  });
+}
+
+UserInterface.prototype.handleDragBegin = function(e) {
   const cursorX = e.offsetX;
   const cursorY = e.offsetY;
 
   // start dragging from the click location
-  imageDragger.dragBegin(cursorX, cursorY);
+  this.imageDragger.dragBegin(cursorX, cursorY);
 }
 
-function handleDrag(e) {
+UserInterface.prototype.handleDrag = function(e) {
   const currentX = e.offsetX;
   const currentY = e.offsetY;
 
-  imageDragger.drag(currentX, currentY);
+  this.imageDragger.drag(currentX, currentY);
 }
 
-function handleDragEnd() {
-  imageDragger.dragEnd();
+UserInterface.prototype.handleDragEnd = function() {
+  this.imageDragger.dragEnd();
 }
 
-//HELPER FUNCTIONS
-
-function loadImage(files) {
+UserInterface.prototype.loadImage = function(files) {
   const imageFile = files[0];
   const imageURL = URL.createObjectURL(imageFile);
 
-  imageDragger.loadBackgroundImage(imageURL);
+  this.imageDragger.loadBackgroundImage(imageURL);
 }
 
-function saveImage() {
-  this.href = canvas.toDataURL('image/png');
+UserInterface.prototype.transferClick = function(e) {
+  // transfer click from browse link to file input, so that ugly file input element can be hidden and replaced with button.
+  if (this.fileInput) {
+    this.fileInput.click();
+  }
+  // prevent navigation to "#"
+  e.preventDefault();
 }
+
+UserInterface.prototype.saveImage = function(link) {
+  const imageURL = this.canvas.toDataURL('image/png');
+
+  link.href = imageURL;
+}
+
+// end UserInterface class
 
 //MAIN
 
 // instantiate class
 const display = new Display(canvas);
 const imageDragger = new ImageDragger(display);
+const userInterface = new UserInterface(imageDragger);
 
 imageDragger.loadBackgroundImage(DEFAULT_BACKGROUND_PATH);
