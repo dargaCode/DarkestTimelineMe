@@ -293,10 +293,13 @@ UserInterface.prototype.handleDragEnd = function() {
 }
 
 UserInterface.prototype.loadImage = function(files) {
-  const imageFile = files[0];
-  const imageURL = URL.createObjectURL(imageFile);
+  // length check stops Chrome from throwing an error on cancelling the filebrowser
+  if (files.length > 0) {
+    const imageFile = files[0];
+    const imageURL = URL.createObjectURL(imageFile);
 
-  this.imageDragger.loadBackgroundImage(imageURL);
+    this.imageDragger.loadBackgroundImage(imageURL);
+  }
 }
 
 UserInterface.prototype.transferClick = function(e) {
