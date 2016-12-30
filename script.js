@@ -316,11 +316,16 @@ UserInterface.prototype.saveImage = function(link) {
 
 // end UserInterface class
 
+//FUNCTIONS
+
+function init() {
+  const display = new Display(canvas);
+  const imageDragger = new ImageDragger(display);
+  const userInterface = new UserInterface(imageDragger);
+
+  imageDragger.loadBackgroundImage(DEFAULT_BACKGROUND_PATH);
+}
+
 //MAIN
 
-// instantiate class
-const display = new Display(canvas);
-const imageDragger = new ImageDragger(display);
-const userInterface = new UserInterface(imageDragger);
-
-imageDragger.loadBackgroundImage(DEFAULT_BACKGROUND_PATH);
+init();
