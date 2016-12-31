@@ -22,6 +22,10 @@ function ImageDragger(display) {
   };
   this.background = {
     image: null,
+    size: {
+      width: null,
+      height: null,
+    },
     position: {
       x: 0,
       y: 0,
@@ -57,19 +61,30 @@ ImageDragger.prototype.loadBackgroundImage = function(path) {
 
 ImageDragger.prototype.setBackgroundImage = function(image) {
   this.background.image = image;
-  this.setBackgroundMinPos(image);
+
+  this.setBackgroundSize(image.width, image.height);
+  this.setBackgroundMinPos();
   this.resetBackgroundLastPos();
   this.resetBackgroundPos();
 }
 
+ImageDragger.prototype.setBackgroundSize = function(width, height) {
+  this.background.size.width = width;
+  this.background.size.height = height;
+}
+
 // use the image size to lock how far it can pan left/up without showing whitespace behind it
-ImageDragger.prototype.setBackgroundMinPos = function(image) {
+ImageDragger.prototype.setBackgroundMinPos = function() {
+  const backgroundSize = this.background.size;
+  const backgroundWidth = backgroundSize.width;
+  const backgroundHeight = backgroundSize.height;
+
   const canvasSize = this.display.getCanvasSize();
   const canvasWidth = canvasSize.width;
   const canvasHeight = canvasSize.height;
 
-  this.background.minPos.x = canvasWidth - image.width;
-  this.background.minPos.y = canvasHeight - image.height;
+  this.background.minPos.x = canvasWidth - backgroundWidth;
+  this.background.minPos.y = canvasHeight - backgroundHeight;
 }
 
 ImageDragger.prototype.setBackgroundLastPos = function(x, y) {
@@ -214,12 +229,14 @@ Display.prototype.drawBackground = function(background) {
   const backgroundImage = background.image;
   const x = background.position.x;
   const y = background.position.y;
+  const imageWidth = background.size.width;
+  const imageHeight = background.size.height;
 
   // clear the background
   this.clearCanvas();
 
   // redraw the background
-  this.context.drawImage(backgroundImage, x, y);
+  this.context.drawImage(backgroundImage, x, y, imageWidth, imageHeight);
 }
 
 Display.prototype.clearCanvas = function() {
