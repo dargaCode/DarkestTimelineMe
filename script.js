@@ -5,21 +5,56 @@ const DEFAULT_BACKGROUND_PATH = 'background.jpg'
 
 // CLASSES
 
-// ImageDragger Class
+// Cursor class
+
+function Cursor() {
+  this.lastPosition = {
+    x: null,
+    y: null,
+  };
+  this.position = {
+    x: null,
+    y: null,
+  };
+}
+
+Cursor.prototype.setLastPosition = function(x, y) {
+  this.lastPosition.x = x;
+  this.lastPosition.y = y;
+}
+
+Cursor.prototype.resetLastPosition = function() {
+  this.setLastPosition(null, null);
+}
+
+Cursor.prototype.setPosition = function(x, y) {
+  this.position.x = x;
+  this.position.y = y;
+}
+
+Cursor.prototype.resetPosition = function() {
+  this.setPosition(null, null);
+}
+
+Cursor.prototype.generatePositionDelta = function() {
+  // subtract pos from lastPos
+  const delta = {
+    x: this.position.x - this.lastPosition.x,
+    y: this.position.y - this.lastPosition.y,
+  }
+
+  // return delta object
+  return delta;
+}
+
+// end Cursor class
+
+// ImageDragger class
 
 function ImageDragger(display) {
   this.display = display;
   this.dragging = false;
-  this.cursor = {
-    position: {
-      x: null,
-      y: null,
-    },
-    lastPosition: {
-      x: null,
-      y: null,
-    },
-  };
+  this.cursor = new Cursor();
   this.background = {
     image: null,
     size: {
@@ -109,33 +144,15 @@ ImageDragger.prototype.resetBackgroundPos = function() {
   this.setBackgroundPos(0, 0);
 }
 
-ImageDragger.prototype.setCursorLastPos = function(x, y) {
-  this.cursor.lastPosition.x = x;
-  this.cursor.lastPosition.y = y;
-}
-
-ImageDragger.prototype.resetCursorLastPos = function() {
-  this.setCursorLastPos(null, null);
-}
-
-ImageDragger.prototype.setCursorPos = function(x, y) {
-  this.cursor.position.x = x;
-  this.cursor.position.y = y;
-}
-
-ImageDragger.prototype.resetCursorPos = function() {
-  this.setCursorPos(null, null);
-}
-
   // methods
 
 ImageDragger.prototype.dragBegin = function(startX, startY) {
   this.dragging = true;
-  this.setCursorLastPos(startX, startY);
+  this.cursor.setLastPosition(startX, startY);
 }
 
 ImageDragger.prototype.drag = function(currentX, currentY) {
-  this.setCursorPos(currentX, currentY);
+  this.cursor.setPosition(currentX, currentY);
 
   // background only moves if a drag is in progress
   if (this.dragging) {
@@ -149,8 +166,8 @@ ImageDragger.prototype.dragEnd = function() {
     this.dragging = false;
 
     // reset unneeded data
-    this.resetCursorLastPos();
-    this.resetCursorPos();
+    this.cursor.resetLastPosition();
+    this.cursor.resetPosition();
 
     // prepare background pos for next drag
     this.propagateBackgroundPos();
@@ -161,23 +178,12 @@ ImageDragger.prototype.dragEnd = function() {
 
 ImageDragger.prototype.generateNewBackgroundPos = function() {
   const lastPosition = this.background.lastPosition;
-  const delta = this.generateCursorDelta();
+  const delta = this.cursor.generatePositionDelta();
 
   const newX = lastPosition.x + delta.x;
   const newY = lastPosition.y + delta.y;
 
   this.setBackgroundPos(newX, newY);
-}
-
-ImageDragger.prototype.generateCursorDelta = function() {
-  // subtract pos from lastPos
-  const delta = {
-    x: this.cursor.position.x - this.cursor.lastPosition.x,
-    y: this.cursor.position.y - this.cursor.lastPosition.y,
-  }
-
-  // return delta object
-  return delta;
 }
 
 ImageDragger.prototype.validateBackgroundPos = function(x, y) {
@@ -216,7 +222,7 @@ ImageDragger.prototype.propagateBackgroundPos = function() {
   this.setBackgroundLastPos(position.x, position.y);
 }
 
-// end ImageDragger Class
+// end ImageDragger class
 
 // Display class
 
