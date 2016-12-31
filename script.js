@@ -219,10 +219,18 @@ Display.prototype.drawBackground = function(background) {
 }
 
 Display.prototype.clearCanvas = function() {
-  const width = canvas.width;
-  const height = canvas.height;
+  const canvasSize = this.getCanvasSize();
+  const canvasWidth = canvasSize.width;
+  const canvasHeight = canvasSize.height;
 
-  this.context.clearRect(0, 0, width, height);
+  this.context.clearRect(0, 0, canvasWidth, canvasHeight);
+}
+
+Display.prototype.getCanvasSize = function() {
+  return {
+    width: this.canvas.width,
+    height: this.canvas.height,
+  };
 }
 
 // end Display class
