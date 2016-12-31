@@ -64,8 +64,12 @@ ImageDragger.prototype.setBackgroundImage = function(image) {
 
 // use the image size to lock how far it can pan left/up without showing whitespace behind it
 ImageDragger.prototype.setBackgroundMinPos = function(image) {
-  this.background.minPos.x = canvas.width - image.width;
-  this.background.minPos.y = canvas.height - image.height;
+  const canvasSize = this.display.getCanvasSize();
+  const canvasWidth = canvasSize.width;
+  const canvasHeight = canvasSize.height;
+
+  this.background.minPos.x = canvasWidth - image.width;
+  this.background.minPos.y = canvasHeight - image.height;
 }
 
 ImageDragger.prototype.setBackgroundLastPos = function(x, y) {
