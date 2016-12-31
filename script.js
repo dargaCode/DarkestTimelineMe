@@ -334,7 +334,7 @@ UserInterface.prototype.saveImage = function(link) {
 //FUNCTIONS
 
 function init() {
-  const display = new Display(canvas);
+  const display = new Display(window.canvas);
   const imageDragger = new ImageDragger(display);
   const userInterface = new UserInterface(imageDragger);
 
