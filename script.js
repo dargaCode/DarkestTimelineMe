@@ -37,7 +37,7 @@ Cursor.prototype.resetPosition = function() {
 }
 
 Cursor.prototype.generatePositionDelta = function() {
-  // subtract pos from lastPos
+  // subtract current position from last position
   const delta = {
     x: this.position.x - this.lastPosition.x,
     y: this.position.y - this.lastPosition.y,
@@ -49,38 +49,129 @@ Cursor.prototype.generatePositionDelta = function() {
 
 // end Cursor class
 
+// Background class
+
+function Background(display) {
+  this.display = display;
+  this.image = null;
+  this.dimensions = {
+    width: null,
+    height: null,
+  };
+  this.lastPosition = {
+    x: null,
+    y: null,
+  };
+  this.position = {
+    x: null,
+    y: null,
+  };
+  this.minPosition = {
+    x: null,
+    y: null,
+  };
+  this.maxPosition = {
+    x: 0,
+    y: 0,
+  };
+}
+
+Background.prototype.setDimensions = function(width, height) {
+  this.dimensions.width = width;
+  this.dimensions.height = height;
+}
+
+Background.prototype.setLastPosition = function(x, y) {
+  this.lastPosition.x = x;
+  this.lastPosition.y = y;
+}
+
+Background.prototype.resetLastPosition = function() {
+  this.setLastPosition(0, 0);
+}
+
+Background.prototype.setPosition = function(x, y) {
+  // validate x and y to make sure whitespace doesn't show behind the background
+  const validatedPos = this.validatePosition(x, y);
+
+  this.position.x = validatedPos.x;
+  this.position.y = validatedPos.y;
+  this.display.drawBackground(this);
+}
+
+Background.prototype.resetPosition = function() {
+  this.setPosition(0, 0);
+}
+
+Background.prototype.validatePosition = function(x, y) {
+  const minPosition = this.minPosition;
+  const maxPosition = this.maxPosition;
+
+  const result = {};
+
+  // validate x
+  if (x > maxPosition.x) {
+    x = maxPosition.x;
+  }
+  if (x < minPosition.x) {
+    x = minPosition.x;
+  }
+
+  // validate y
+  if (y > maxPosition.y) {
+    y = maxPosition.y;
+  }
+  if (y < minPosition.y) {
+    y = minPosition.y;
+  }
+
+  result.x = x;
+  result.y = y;
+
+  return result;
+}
+
+// allows the image to be repeatedly dragged
+Background.prototype.propagatePosition = function() {
+  const position = this.position;
+
+  // copy pos to last pos
+  this.setLastPosition(position.x, position.y);
+}
+
+// end Background class
+
 // ImageDragger class
 
 function ImageDragger(display) {
   this.display = display;
   this.dragging = false;
   this.cursor = new Cursor();
-  this.background = {
-    image: null,
-    size: {
-      width: null,
-      height: null,
-    },
-    position: {
-      x: 0,
-      y: 0,
-    },
-    lastPosition: {
-      x: null,
-      y: null,
-    },
-    minPos: {
-      x: null,
-      y: null,
-    },
-    maxPos: {
-      x: 0,
-      y: 0,
-    }
-  };
+  this.background = new Background(display);
 }
 
-  // setters
+ImageDragger.prototype.setBackgroundImage = function(image) {
+  this.background.image = image;
+
+  this.background.setDimensions(image.width, image.height);
+  this.setBackgroundMinPos();
+  this.background.resetLastPosition();
+  this.background.resetPosition();
+}
+
+// use the image dimensions to lock how far it can pan left/up without showing whitespace behind it
+ImageDragger.prototype.setBackgroundMinPos = function() {
+  const backgroundSize = this.background.dimensions;
+  const backgroundWidth = backgroundSize.width;
+  const backgroundHeight = backgroundSize.height;
+
+  const canvasSize = this.display.getCanvasSize();
+  const canvasWidth = canvasSize.width;
+  const canvasHeight = canvasSize.height;
+
+  this.background.minPosition.x = canvasWidth - backgroundWidth;
+  this.background.minPosition.y = canvasHeight - backgroundHeight;
+}
 
 ImageDragger.prototype.loadBackgroundImage = function(path) {
   // need to have access to the ImageDragger and the loaded Image at the same time.
@@ -93,58 +184,6 @@ ImageDragger.prototype.loadBackgroundImage = function(path) {
 
   backgroundImg.src = path;
 }
-
-ImageDragger.prototype.setBackgroundImage = function(image) {
-  this.background.image = image;
-
-  this.setBackgroundSize(image.width, image.height);
-  this.setBackgroundMinPos();
-  this.resetBackgroundLastPos();
-  this.resetBackgroundPos();
-}
-
-ImageDragger.prototype.setBackgroundSize = function(width, height) {
-  this.background.size.width = width;
-  this.background.size.height = height;
-}
-
-// use the image size to lock how far it can pan left/up without showing whitespace behind it
-ImageDragger.prototype.setBackgroundMinPos = function() {
-  const backgroundSize = this.background.size;
-  const backgroundWidth = backgroundSize.width;
-  const backgroundHeight = backgroundSize.height;
-
-  const canvasSize = this.display.getCanvasSize();
-  const canvasWidth = canvasSize.width;
-  const canvasHeight = canvasSize.height;
-
-  this.background.minPos.x = canvasWidth - backgroundWidth;
-  this.background.minPos.y = canvasHeight - backgroundHeight;
-}
-
-ImageDragger.prototype.setBackgroundLastPos = function(x, y) {
-  this.background.lastPosition.x = x;
-  this.background.lastPosition.y = y;
-}
-
-ImageDragger.prototype.setBackgroundPos = function(x, y) {
-  // validate x and y to make sure whitespace doesn't show behind the background
-  const validatedPos = this.validateBackgroundPos(x, y);
-
-  this.background.position.x = validatedPos.x;
-  this.background.position.y = validatedPos.y;
-  this.display.drawBackground(this.background);
-}
-
-ImageDragger.prototype.resetBackgroundLastPos = function() {
-  this.setBackgroundLastPos(0, 0);
-}
-
-ImageDragger.prototype.resetBackgroundPos = function() {
-  this.setBackgroundPos(0, 0);
-}
-
-  // methods
 
 ImageDragger.prototype.dragBegin = function(startX, startY) {
   this.dragging = true;
@@ -170,11 +209,9 @@ ImageDragger.prototype.dragEnd = function() {
     this.cursor.resetPosition();
 
     // prepare background pos for next drag
-    this.propagateBackgroundPos();
+    this.background.propagatePosition();
   }
 }
-
-  // helper methods
 
 ImageDragger.prototype.generateNewBackgroundPos = function() {
   const lastPosition = this.background.lastPosition;
@@ -183,43 +220,7 @@ ImageDragger.prototype.generateNewBackgroundPos = function() {
   const newX = lastPosition.x + delta.x;
   const newY = lastPosition.y + delta.y;
 
-  this.setBackgroundPos(newX, newY);
-}
-
-ImageDragger.prototype.validateBackgroundPos = function(x, y) {
-  const minPos = this.background.minPos;
-  const maxPos = this.background.maxPos;
-
-  const result = {};
-
-  // validate x
-  if (x > maxPos.x) {
-    x = maxPos.x;
-  }
-  if (x < minPos.x) {
-    x = minPos.x;
-  }
-
-  // validate y
-  if (y > maxPos.y) {
-    y = maxPos.y;
-  }
-  if (y < minPos.y) {
-    y = minPos.y;
-  }
-
-  result.x = x;
-  result.y = y;
-
-  return result;
-}
-
-// allows the image to be repeatedly dragged
-ImageDragger.prototype.propagateBackgroundPos = function() {
-  const position = this.background.position;
-
-  // copy pos to last pos
-  this.setBackgroundLastPos(position.x, position.y);
+  this.background.setPosition(newX, newY);
 }
 
 // end ImageDragger class
@@ -235,8 +236,8 @@ Display.prototype.drawBackground = function(background) {
   const backgroundImage = background.image;
   const x = background.position.x;
   const y = background.position.y;
-  const imageWidth = background.size.width;
-  const imageHeight = background.size.height;
+  const imageWidth = background.dimensions.width;
+  const imageHeight = background.dimensions.height;
 
   // clear the background
   this.clearCanvas();
