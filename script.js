@@ -230,7 +230,7 @@ ImageDragger.prototype.generateNewBackgroundPos = function() {
 
 function Display(canvas) {
   this.canvas = canvas;
-  this.context = canvas.getContext('2d');
+  this.canvasContext = canvas.getContext('2d');
 }
 
 Display.prototype.drawBackground = function(background) {
@@ -244,7 +244,7 @@ Display.prototype.drawBackground = function(background) {
   this.clearCanvas();
 
   // redraw the background
-  this.context.drawImage(backgroundImage, x, y, imageWidth, imageHeight);
+  this.canvasContext.drawImage(backgroundImage, x, y, imageWidth, imageHeight);
 }
 
 Display.prototype.clearCanvas = function() {
@@ -252,7 +252,7 @@ Display.prototype.clearCanvas = function() {
   const canvasWidth = canvasSize.width;
   const canvasHeight = canvasSize.height;
 
-  this.context.clearRect(0, 0, canvasWidth, canvasHeight);
+  this.canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
 }
 
 Display.prototype.getCanvasSize = function() {
