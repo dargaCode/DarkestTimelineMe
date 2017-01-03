@@ -51,8 +51,8 @@ Cursor.prototype.generatePositionDelta = function() {
 
 // BackgroundImage class
 
-function BackgroundImage(display) {
-  this.display = display;
+function BackgroundImage(imageDragger) {
+  this.imageDragger = imageDragger;
   this.image = null;
   this.dimensions = {
     width: null,
@@ -96,7 +96,7 @@ BackgroundImage.prototype.setPosition = function(x, y) {
 
   this.position.x = validatedPos.x;
   this.position.y = validatedPos.y;
-  this.display.drawBackground(this);
+  this.imageDragger.uiManager.display.drawBackground(this);
 }
 
 BackgroundImage.prototype.resetPosition = function() {
@@ -143,11 +143,10 @@ BackgroundImage.prototype.propagatePosition = function() {
 
 // ImageDragger class
 
-function ImageDragger(display) {
-  this.display = display;
+function ImageDragger() {
   this.dragging = false;
   this.cursor = new Cursor();
-  this.backgroundImage = new BackgroundImage(display);
+  this.backgroundImage = new BackgroundImage(this);
   this.uiManager = new UiManager(this);
 }
 
@@ -166,7 +165,7 @@ ImageDragger.prototype.setBackgroundMinPos = function() {
   const backgroundWidth = backgroundSize.width;
   const backgroundHeight = backgroundSize.height;
 
-  const canvasSize = this.display.getCanvasSize();
+  const canvasSize = this.uiManager.display.getCanvasSize();
   const canvasWidth = canvasSize.width;
   const canvasHeight = canvasSize.height;
 
@@ -228,9 +227,8 @@ ImageDragger.prototype.generateNewBackgroundPos = function() {
 
 // Display class
 
-function Display(canvas) {
-  this.canvas = canvas;
-  this.canvasContext = canvas.getContext('2d');
+function Display(uiManager) {
+  this.uiManager = uiManager;
 }
 
 Display.prototype.drawBackground = function(background) {
@@ -244,7 +242,7 @@ Display.prototype.drawBackground = function(background) {
   this.clearCanvas();
 
   // redraw the background
-  this.canvasContext.drawImage(backgroundImage, x, y, imageWidth, imageHeight);
+  this.uiManager.canvasContext.drawImage(backgroundImage, x, y, imageWidth, imageHeight);
 }
 
 Display.prototype.clearCanvas = function() {
@@ -252,13 +250,13 @@ Display.prototype.clearCanvas = function() {
   const canvasWidth = canvasSize.width;
   const canvasHeight = canvasSize.height;
 
-  this.canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
+  this.uiManager.canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
 }
 
 Display.prototype.getCanvasSize = function() {
   return {
-    width: this.canvas.width,
-    height: this.canvas.height,
+    width: this.uiManager.canvas.width,
+    height: this.uiManager.canvas.height,
   };
 }
 
@@ -268,8 +266,10 @@ Display.prototype.getCanvasSize = function() {
 
 function UiManager(imageDragger) {
   this.imageDragger = imageDragger;
+  this.display = new Display(this);
 
   this.canvas = document.querySelector('#canvas');
+  this.canvasContext = canvas.getContext('2d');
   this.fileInput = document.querySelector('#file-input');
   this.browseLink = document.querySelector('#browse-link');
   this.downloadLink = document.querySelector('#download-link');
@@ -359,8 +359,7 @@ UiManager.prototype.saveImage = function(link) {
 //FUNCTIONS
 
 function init() {
-  const display = new Display(window.canvas);
-  const imageDragger = new ImageDragger(display);
+  const imageDragger = new ImageDragger();
 
   imageDragger.loadBackgroundImage(DEFAULT_BACKGROUND_PATH);
 }
