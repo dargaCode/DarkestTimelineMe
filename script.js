@@ -148,6 +148,7 @@ function ImageDragger(display) {
   this.dragging = false;
   this.cursor = new Cursor();
   this.backgroundImage = new BackgroundImage(display);
+  this.uiManager = new UiManager(this);
 }
 
 ImageDragger.prototype.setBackgroundImage = function(image) {
@@ -360,7 +361,6 @@ UiManager.prototype.saveImage = function(link) {
 function init() {
   const display = new Display(window.canvas);
   const imageDragger = new ImageDragger(display);
-  const uiManager = new UiManager(imageDragger);
 
   imageDragger.loadBackgroundImage(DEFAULT_BACKGROUND_PATH);
 }
