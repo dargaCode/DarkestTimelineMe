@@ -263,9 +263,9 @@ Display.prototype.getCanvasSize = function() {
 
 // end Display class
 
-// UserInterface class
+// UiManager class
 
-function UserInterface(imageDragger) {
+function UiManager(imageDragger) {
   this.imageDragger = imageDragger;
 
   this.canvas = document.querySelector('#canvas');
@@ -276,7 +276,7 @@ function UserInterface(imageDragger) {
   this.addEvents();
 }
 
-UserInterface.prototype.addEvents = function() {
+UiManager.prototype.addEvents = function() {
   // all events need to know about the UI class
   const self = this;
 
@@ -309,7 +309,7 @@ UserInterface.prototype.addEvents = function() {
   });
 }
 
-UserInterface.prototype.handleDragBegin = function(e) {
+UiManager.prototype.handleDragBegin = function(e) {
   const cursorX = e.offsetX;
   const cursorY = e.offsetY;
 
@@ -317,18 +317,18 @@ UserInterface.prototype.handleDragBegin = function(e) {
   this.imageDragger.dragBegin(cursorX, cursorY);
 }
 
-UserInterface.prototype.handleDrag = function(e) {
+UiManager.prototype.handleDrag = function(e) {
   const currentX = e.offsetX;
   const currentY = e.offsetY;
 
   this.imageDragger.drag(currentX, currentY);
 }
 
-UserInterface.prototype.handleDragEnd = function() {
+UiManager.prototype.handleDragEnd = function() {
   this.imageDragger.dragEnd();
 }
 
-UserInterface.prototype.loadImage = function(files) {
+UiManager.prototype.loadImage = function(files) {
   // length check stops Chrome from throwing an error on cancelling the filebrowser
   if (files.length > 0) {
     const imageFile = files[0];
@@ -338,7 +338,7 @@ UserInterface.prototype.loadImage = function(files) {
   }
 }
 
-UserInterface.prototype.transferClick = function(e) {
+UiManager.prototype.transferClick = function(e) {
   // transfer click from browse link to file input, so that ugly file input element can be hidden and replaced with button.
   if (this.fileInput) {
     this.fileInput.click();
@@ -347,20 +347,20 @@ UserInterface.prototype.transferClick = function(e) {
   e.preventDefault();
 }
 
-UserInterface.prototype.saveImage = function(link) {
+UiManager.prototype.saveImage = function(link) {
   const imageURL = this.canvas.toDataURL('image/png');
 
   link.href = imageURL;
 }
 
-// end UserInterface class
+// end UiManager class
 
 //FUNCTIONS
 
 function init() {
   const display = new Display(window.canvas);
   const imageDragger = new ImageDragger(display);
-  const userInterface = new UserInterface(imageDragger);
+  const uiManager = new UiManager(imageDragger);
 
   imageDragger.loadBackgroundImage(DEFAULT_BACKGROUND_PATH);
 }
