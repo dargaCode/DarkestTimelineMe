@@ -5,54 +5,96 @@ const DEFAULT_BACKGROUND_PATH = 'background.jpg'
 
 // CLASSES
 
-// Cursor class
+// ImageDragger class
 
-function Cursor() {
-  this.lastPosition = {
-    x: null,
-    y: null,
-  };
-  this.position = {
-    x: null,
-    y: null,
-  };
+function ImageDragger() {
+  this.backgroundImage = new BackgroundImage(this);
+  this.cursor = new Cursor();
+  this.uiManager = new UiManager(this);
+
+  this.dragging = false;
 }
 
-Cursor.prototype.setLastPosition = function(x, y) {
-  this.lastPosition.x = x;
-  this.lastPosition.y = y;
+ImageDragger.prototype.setBackgroundImage = function(image) {
+  this.backgroundImage.image = image;
+
+  this.backgroundImage.setDimensions(image.width, image.height);
+  this.setBackgroundMinPos();
+  this.backgroundImage.resetLastPosition();
+  this.backgroundImage.resetPosition();
 }
 
-Cursor.prototype.resetLastPosition = function() {
-  this.setLastPosition(null, null);
+// use the image dimensions to lock how far it can pan left/up without showing whitespace behind it
+ImageDragger.prototype.setBackgroundMinPos = function() {
+  const backgroundSize = this.backgroundImage.dimensions;
+  const backgroundWidth = backgroundSize.width;
+  const backgroundHeight = backgroundSize.height;
+
+  const canvasSize = this.uiManager.display.getCanvasSize();
+  const canvasWidth = canvasSize.width;
+  const canvasHeight = canvasSize.height;
+
+  this.backgroundImage.minPosition.x = canvasWidth - backgroundWidth;
+  this.backgroundImage.minPosition.y = canvasHeight - backgroundHeight;
 }
 
-Cursor.prototype.setPosition = function(x, y) {
-  this.position.x = x;
-  this.position.y = y;
+ImageDragger.prototype.loadBackgroundImage = function(path) {
+  // need to have access to the ImageDragger and the loaded Image at the same time.
+  const self = this;
+  const backgroundImg = new Image();
+
+  backgroundImg.addEventListener("load", function() {
+    self.setBackgroundImage(this);
+  });
+
+  backgroundImg.src = path;
 }
 
-Cursor.prototype.resetPosition = function() {
-  this.setPosition(null, null);
+ImageDragger.prototype.dragBegin = function(startX, startY) {
+  this.dragging = true;
+  this.cursor.setLastPosition(startX, startY);
 }
 
-Cursor.prototype.generatePositionDelta = function() {
-  // subtract current position from last position
-  const delta = {
-    x: this.position.x - this.lastPosition.x,
-    y: this.position.y - this.lastPosition.y,
+ImageDragger.prototype.drag = function(currentX, currentY) {
+  this.cursor.setPosition(currentX, currentY);
+
+  // background only moves if a drag is in progress
+  if (this.dragging) {
+    this.generateNewBackgroundPos();
   }
-
-  // return delta object
-  return delta;
 }
 
-// end Cursor class
+ImageDragger.prototype.dragEnd = function() {
+  // only end drag when a drag is in progress. This improves behavior when drag is ended by dragging beyond canvas border, but mouseup happens after cursor comes back in.
+  if(this.dragging) {
+    this.dragging = false;
+
+    // reset unneeded data
+    this.cursor.resetLastPosition();
+    this.cursor.resetPosition();
+
+    // prepare background pos for next drag
+    this.backgroundImage.propagatePosition();
+  }
+}
+
+ImageDragger.prototype.generateNewBackgroundPos = function() {
+  const lastPosition = this.backgroundImage.lastPosition;
+  const delta = this.cursor.generatePositionDelta();
+
+  const newX = lastPosition.x + delta.x;
+  const newY = lastPosition.y + delta.y;
+
+  this.backgroundImage.setPosition(newX, newY);
+}
+
+// end ImageDragger class
 
 // BackgroundImage class
 
 function BackgroundImage(imageDragger) {
   this.imageDragger = imageDragger;
+
   this.image = null;
   this.dimensions = {
     width: null,
@@ -141,126 +183,50 @@ BackgroundImage.prototype.propagatePosition = function() {
 
 // end BackgroundImage class
 
-// ImageDragger class
 
-function ImageDragger() {
-  this.dragging = false;
-  this.cursor = new Cursor();
-  this.backgroundImage = new BackgroundImage(this);
-  this.uiManager = new UiManager(this);
-}
+// Cursor class
 
-ImageDragger.prototype.setBackgroundImage = function(image) {
-  this.backgroundImage.image = image;
-
-  this.backgroundImage.setDimensions(image.width, image.height);
-  this.setBackgroundMinPos();
-  this.backgroundImage.resetLastPosition();
-  this.backgroundImage.resetPosition();
-}
-
-// use the image dimensions to lock how far it can pan left/up without showing whitespace behind it
-ImageDragger.prototype.setBackgroundMinPos = function() {
-  const backgroundSize = this.backgroundImage.dimensions;
-  const backgroundWidth = backgroundSize.width;
-  const backgroundHeight = backgroundSize.height;
-
-  const canvasSize = this.uiManager.display.getCanvasSize();
-  const canvasWidth = canvasSize.width;
-  const canvasHeight = canvasSize.height;
-
-  this.backgroundImage.minPosition.x = canvasWidth - backgroundWidth;
-  this.backgroundImage.minPosition.y = canvasHeight - backgroundHeight;
-}
-
-ImageDragger.prototype.loadBackgroundImage = function(path) {
-  // need to have access to the ImageDragger and the loaded Image at the same time.
-  const self = this;
-  const backgroundImg = new Image();
-
-  backgroundImg.addEventListener("load", function() {
-    self.setBackgroundImage(this);
-  });
-
-  backgroundImg.src = path;
-}
-
-ImageDragger.prototype.dragBegin = function(startX, startY) {
-  this.dragging = true;
-  this.cursor.setLastPosition(startX, startY);
-}
-
-ImageDragger.prototype.drag = function(currentX, currentY) {
-  this.cursor.setPosition(currentX, currentY);
-
-  // background only moves if a drag is in progress
-  if (this.dragging) {
-    this.generateNewBackgroundPos();
-  }
-}
-
-ImageDragger.prototype.dragEnd = function() {
-  // only end drag when a drag is in progress. This improves behavior when drag is ended by dragging beyond canvas border, but mouseup happens after cursor comes back in.
-  if(this.dragging) {
-    this.dragging = false;
-
-    // reset unneeded data
-    this.cursor.resetLastPosition();
-    this.cursor.resetPosition();
-
-    // prepare background pos for next drag
-    this.backgroundImage.propagatePosition();
-  }
-}
-
-ImageDragger.prototype.generateNewBackgroundPos = function() {
-  const lastPosition = this.backgroundImage.lastPosition;
-  const delta = this.cursor.generatePositionDelta();
-
-  const newX = lastPosition.x + delta.x;
-  const newY = lastPosition.y + delta.y;
-
-  this.backgroundImage.setPosition(newX, newY);
-}
-
-// end ImageDragger class
-
-// Display class
-
-function Display(uiManager) {
-  this.uiManager = uiManager;
-}
-
-Display.prototype.drawBackground = function(background) {
-  const backgroundImage = background.image;
-  const x = background.position.x;
-  const y = background.position.y;
-  const imageWidth = background.dimensions.width;
-  const imageHeight = background.dimensions.height;
-
-  // clear the background
-  this.clearCanvas();
-
-  // redraw the background
-  this.uiManager.canvasContext.drawImage(backgroundImage, x, y, imageWidth, imageHeight);
-}
-
-Display.prototype.clearCanvas = function() {
-  const canvasSize = this.getCanvasSize();
-  const canvasWidth = canvasSize.width;
-  const canvasHeight = canvasSize.height;
-
-  this.uiManager.canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
-}
-
-Display.prototype.getCanvasSize = function() {
-  return {
-    width: this.uiManager.canvas.width,
-    height: this.uiManager.canvas.height,
+function Cursor() {
+  this.lastPosition = {
+    x: null,
+    y: null,
+  };
+  this.position = {
+    x: null,
+    y: null,
   };
 }
 
-// end Display class
+Cursor.prototype.setLastPosition = function(x, y) {
+  this.lastPosition.x = x;
+  this.lastPosition.y = y;
+}
+
+Cursor.prototype.resetLastPosition = function() {
+  this.setLastPosition(null, null);
+}
+
+Cursor.prototype.setPosition = function(x, y) {
+  this.position.x = x;
+  this.position.y = y;
+}
+
+Cursor.prototype.resetPosition = function() {
+  this.setPosition(null, null);
+}
+
+Cursor.prototype.generatePositionDelta = function() {
+  // subtract current position from last position
+  const delta = {
+    x: this.position.x - this.lastPosition.x,
+    y: this.position.y - this.lastPosition.y,
+  }
+
+  // return delta object
+  return delta;
+}
+
+// end Cursor class
 
 // UiManager class
 
@@ -355,6 +321,43 @@ UiManager.prototype.saveImage = function(link) {
 }
 
 // end UiManager class
+
+// Display class
+
+function Display(uiManager) {
+  this.uiManager = uiManager;
+}
+
+Display.prototype.drawBackground = function(background) {
+  const backgroundImage = background.image;
+  const x = background.position.x;
+  const y = background.position.y;
+  const imageWidth = background.dimensions.width;
+  const imageHeight = background.dimensions.height;
+
+  // clear the background
+  this.clearCanvas();
+
+  // redraw the background
+  this.uiManager.canvasContext.drawImage(backgroundImage, x, y, imageWidth, imageHeight);
+}
+
+Display.prototype.clearCanvas = function() {
+  const canvasSize = this.getCanvasSize();
+  const canvasWidth = canvasSize.width;
+  const canvasHeight = canvasSize.height;
+
+  this.uiManager.canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
+}
+
+Display.prototype.getCanvasSize = function() {
+  return {
+    width: this.uiManager.canvas.width,
+    height: this.uiManager.canvas.height,
+  };
+}
+
+// end Display class
 
 //FUNCTIONS
 
