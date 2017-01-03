@@ -49,9 +49,9 @@ Cursor.prototype.generatePositionDelta = function() {
 
 // end Cursor class
 
-// Background class
+// BackgroundImage class
 
-function Background(display) {
+function BackgroundImage(display) {
   this.display = display;
   this.image = null;
   this.dimensions = {
@@ -76,21 +76,21 @@ function Background(display) {
   };
 }
 
-Background.prototype.setDimensions = function(width, height) {
+BackgroundImage.prototype.setDimensions = function(width, height) {
   this.dimensions.width = width;
   this.dimensions.height = height;
 }
 
-Background.prototype.setLastPosition = function(x, y) {
+BackgroundImage.prototype.setLastPosition = function(x, y) {
   this.lastPosition.x = x;
   this.lastPosition.y = y;
 }
 
-Background.prototype.resetLastPosition = function() {
+BackgroundImage.prototype.resetLastPosition = function() {
   this.setLastPosition(0, 0);
 }
 
-Background.prototype.setPosition = function(x, y) {
+BackgroundImage.prototype.setPosition = function(x, y) {
   // validate x and y to make sure whitespace doesn't show behind the background
   const validatedPos = this.getValidPosition(x, y);
 
@@ -99,11 +99,11 @@ Background.prototype.setPosition = function(x, y) {
   this.display.drawBackground(this);
 }
 
-Background.prototype.resetPosition = function() {
+BackgroundImage.prototype.resetPosition = function() {
   this.setPosition(0, 0);
 }
 
-Background.prototype.getValidPosition = function(x, y) {
+BackgroundImage.prototype.getValidPosition = function(x, y) {
   const minPosition = this.minPosition;
   const maxPosition = this.maxPosition;
 
@@ -132,14 +132,14 @@ Background.prototype.getValidPosition = function(x, y) {
 }
 
 // allows the image to be repeatedly dragged
-Background.prototype.propagatePosition = function() {
+BackgroundImage.prototype.propagatePosition = function() {
   const position = this.position;
 
   // copy pos to last pos
   this.setLastPosition(position.x, position.y);
 }
 
-// end Background class
+// end BackgroundImage class
 
 // ImageDragger class
 
@@ -147,21 +147,21 @@ function ImageDragger(display) {
   this.display = display;
   this.dragging = false;
   this.cursor = new Cursor();
-  this.background = new Background(display);
+  this.backgroundImage = new BackgroundImage(display);
 }
 
 ImageDragger.prototype.setBackgroundImage = function(image) {
-  this.background.image = image;
+  this.backgroundImage.image = image;
 
-  this.background.setDimensions(image.width, image.height);
+  this.backgroundImage.setDimensions(image.width, image.height);
   this.setBackgroundMinPos();
-  this.background.resetLastPosition();
-  this.background.resetPosition();
+  this.backgroundImage.resetLastPosition();
+  this.backgroundImage.resetPosition();
 }
 
 // use the image dimensions to lock how far it can pan left/up without showing whitespace behind it
 ImageDragger.prototype.setBackgroundMinPos = function() {
-  const backgroundSize = this.background.dimensions;
+  const backgroundSize = this.backgroundImage.dimensions;
   const backgroundWidth = backgroundSize.width;
   const backgroundHeight = backgroundSize.height;
 
@@ -169,8 +169,8 @@ ImageDragger.prototype.setBackgroundMinPos = function() {
   const canvasWidth = canvasSize.width;
   const canvasHeight = canvasSize.height;
 
-  this.background.minPosition.x = canvasWidth - backgroundWidth;
-  this.background.minPosition.y = canvasHeight - backgroundHeight;
+  this.backgroundImage.minPosition.x = canvasWidth - backgroundWidth;
+  this.backgroundImage.minPosition.y = canvasHeight - backgroundHeight;
 }
 
 ImageDragger.prototype.loadBackgroundImage = function(path) {
@@ -209,18 +209,18 @@ ImageDragger.prototype.dragEnd = function() {
     this.cursor.resetPosition();
 
     // prepare background pos for next drag
-    this.background.propagatePosition();
+    this.backgroundImage.propagatePosition();
   }
 }
 
 ImageDragger.prototype.generateNewBackgroundPos = function() {
-  const lastPosition = this.background.lastPosition;
+  const lastPosition = this.backgroundImage.lastPosition;
   const delta = this.cursor.generatePositionDelta();
 
   const newX = lastPosition.x + delta.x;
   const newY = lastPosition.y + delta.y;
 
-  this.background.setPosition(newX, newY);
+  this.backgroundImage.setPosition(newX, newY);
 }
 
 // end ImageDragger class
