@@ -92,7 +92,7 @@ Background.prototype.resetLastPosition = function() {
 
 Background.prototype.setPosition = function(x, y) {
   // validate x and y to make sure whitespace doesn't show behind the background
-  const validatedPos = this.validatePosition(x, y);
+  const validatedPos = this.getValidPosition(x, y);
 
   this.position.x = validatedPos.x;
   this.position.y = validatedPos.y;
@@ -103,7 +103,7 @@ Background.prototype.resetPosition = function() {
   this.setPosition(0, 0);
 }
 
-Background.prototype.validatePosition = function(x, y) {
+Background.prototype.getValidPosition = function(x, y) {
   const minPosition = this.minPosition;
   const maxPosition = this.maxPosition;
 
