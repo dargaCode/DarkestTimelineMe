@@ -13,6 +13,7 @@ function ImageDragger() {
   this.backgroundImage = new BackgroundImage(this);
   this.cursor = new Cursor();
   this.uiManager = new UiManager(this);
+  this.display = new Display(this.uiManager.canvas);
 }
 
 ImageDragger.prototype.loadBackgroundImage = function(path) {
@@ -110,7 +111,7 @@ BackgroundImage.prototype.setBackgroundMinPos = function() {
   const backgroundWidth = backgroundSize.width;
   const backgroundHeight = backgroundSize.height;
 
-  const canvasSize = this.imageDragger.uiManager.display.getCanvasSize();
+  const canvasSize = this.imageDragger.display.getCanvasSize();
   const canvasWidth = canvasSize.width;
   const canvasHeight = canvasSize.height;
 
@@ -138,7 +139,7 @@ BackgroundImage.prototype.setPosition = function(x, y) {
 
   this.position.x = validatedPos.x;
   this.position.y = validatedPos.y;
-  this.imageDragger.uiManager.display.drawBackground(this);
+  this.imageDragger.display.drawBackground(this);
 }
 
 BackgroundImage.prototype.resetPosition = function() {
@@ -241,8 +242,6 @@ function UiManager(imageDragger) {
 
 UiManager.prototype.init = function() {
   this.addEvents();
-
-  this.display = new Display(this.canvas);
 }
 
 UiManager.prototype.addEvents = function() {
