@@ -322,8 +322,10 @@ UiManager.prototype.saveImage = function(link) {
 // Display class
 
 function Display(canvas) {
-  this.canvasWidth = canvas.width;
-  this.canvasHeight = canvas.height;
+  this.canvasSize = {
+    width: canvas.width,
+    height: canvas.height,
+  };
   this.canvasContext = canvas.getContext('2d');
 }
 
@@ -350,10 +352,7 @@ Display.prototype.clearCanvas = function() {
 }
 
 Display.prototype.getCanvasSize = function() {
-  return {
-    width: this.canvasWidth,
-    height: this.canvasHeight,
-  };
+  return this.canvasSize;
 }
 
 // end Display class
