@@ -8,11 +8,11 @@ const DEFAULT_BACKGROUND_PATH = 'background.jpg'
 // ImageDragger class
 
 function ImageDragger() {
+  this.dragging = false;
+
   this.backgroundImage = new BackgroundImage(this);
   this.cursor = new Cursor();
   this.uiManager = new UiManager(this);
-
-  this.dragging = false;
 }
 
 ImageDragger.prototype.setBackgroundImage = function(image) {
@@ -93,8 +93,6 @@ ImageDragger.prototype.generateNewBackgroundPos = function() {
 // BackgroundImage class
 
 function BackgroundImage(imageDragger) {
-  this.imageDragger = imageDragger;
-
   this.image = null;
   this.dimensions = {
     width: null,
@@ -116,6 +114,8 @@ function BackgroundImage(imageDragger) {
     x: 0,
     y: 0,
   };
+
+  this.imageDragger = imageDragger;
 }
 
 BackgroundImage.prototype.setDimensions = function(width, height) {
@@ -231,14 +231,14 @@ Cursor.prototype.generatePositionDelta = function() {
 // UiManager class
 
 function UiManager(imageDragger) {
-  this.imageDragger = imageDragger;
-  this.display = new Display(this);
-
   this.canvas = document.querySelector('#canvas');
   this.canvasContext = canvas.getContext('2d');
   this.fileInput = document.querySelector('#file-input');
   this.browseLink = document.querySelector('#browse-link');
   this.downloadLink = document.querySelector('#download-link');
+
+  this.imageDragger = imageDragger;
+  this.display = new Display(this);
 }
 
 UiManager.prototype.addEvents = function() {
