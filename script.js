@@ -261,7 +261,7 @@ UiManager.prototype.addEvents = function() {
   });
 
   this.fileInput.addEventListener('change', function() {
-    self.loadImage(this.files);
+    self.handleBrowseClick(this.files);
   });
 
   this.browseLink.addEventListener('click', function(e) {
@@ -269,7 +269,7 @@ UiManager.prototype.addEvents = function() {
   });
 
   this.downloadLink.addEventListener('click', function() {
-    self.saveImage(this);
+    self.handleDownloadClick(this);
   });
 }
 
@@ -292,7 +292,7 @@ UiManager.prototype.handleDragEnd = function() {
   this.imageDragger.dragEnd();
 }
 
-UiManager.prototype.loadImage = function(files) {
+UiManager.prototype.handleBrowseClick = function(files) {
   // length check stops Chrome from throwing an error on cancelling the filebrowser
   if (files.length > 0) {
     const imageFile = files[0];
@@ -311,7 +311,7 @@ UiManager.prototype.transferClick = function(e) {
   e.preventDefault();
 }
 
-UiManager.prototype.saveImage = function(link) {
+UiManager.prototype.handleDownloadClick = function(link) {
   const imageURL = this.canvas.toDataURL('image/png');
 
   link.href = imageURL;
