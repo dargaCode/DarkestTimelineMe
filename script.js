@@ -232,13 +232,12 @@ Cursor.prototype.generatePositionDelta = function() {
 
 function UiManager(imageDragger) {
   this.canvas = document.querySelector('#canvas');
-  this.canvasContext = canvas.getContext('2d');
   this.fileInput = document.querySelector('#file-input');
   this.browseLink = document.querySelector('#browse-link');
   this.downloadLink = document.querySelector('#download-link');
 
   this.imageDragger = imageDragger;
-  this.display = new Display(this);
+  this.display = new Display(this.canvas);
 }
 
 UiManager.prototype.addEvents = function() {
@@ -322,8 +321,10 @@ UiManager.prototype.saveImage = function(link) {
 
 // Display class
 
-function Display(uiManager) {
-  this.uiManager = uiManager;
+function Display(canvas) {
+  this.canvasWidth = canvas.width;
+  this.canvasHeight = canvas.height;
+  this.canvasContext = canvas.getContext('2d');
 }
 
 Display.prototype.drawBackground = function(background) {
@@ -337,7 +338,7 @@ Display.prototype.drawBackground = function(background) {
   this.clearCanvas();
 
   // redraw the background
-  this.uiManager.canvasContext.drawImage(backgroundImage, x, y, imageWidth, imageHeight);
+  this.canvasContext.drawImage(backgroundImage, x, y, imageWidth, imageHeight);
 }
 
 Display.prototype.clearCanvas = function() {
@@ -345,13 +346,13 @@ Display.prototype.clearCanvas = function() {
   const canvasWidth = canvasSize.width;
   const canvasHeight = canvasSize.height;
 
-  this.uiManager.canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
+  this.canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
 }
 
 Display.prototype.getCanvasSize = function() {
   return {
-    width: this.uiManager.canvas.width,
-    height: this.uiManager.canvas.height,
+    width: this.canvasWidth,
+    height: this.canvasHeight,
   };
 }
 
