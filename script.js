@@ -15,36 +15,13 @@ function ImageDragger() {
   this.uiManager = new UiManager(this);
 }
 
-ImageDragger.prototype.setBackgroundImage = function(image) {
-  this.backgroundImage.image = image;
-
-  this.backgroundImage.setDimensions(image.width, image.height);
-  this.setBackgroundMinPos();
-  this.backgroundImage.resetLastPosition();
-  this.backgroundImage.resetPosition();
-}
-
-// use the image dimensions to lock how far it can pan left/up without showing whitespace behind it
-ImageDragger.prototype.setBackgroundMinPos = function() {
-  const backgroundSize = this.backgroundImage.dimensions;
-  const backgroundWidth = backgroundSize.width;
-  const backgroundHeight = backgroundSize.height;
-
-  const canvasSize = this.uiManager.display.getCanvasSize();
-  const canvasWidth = canvasSize.width;
-  const canvasHeight = canvasSize.height;
-
-  this.backgroundImage.minPosition.x = canvasWidth - backgroundWidth;
-  this.backgroundImage.minPosition.y = canvasHeight - backgroundHeight;
-}
-
 ImageDragger.prototype.loadBackgroundImage = function(path) {
   // need to have access to the ImageDragger and the loaded Image at the same time.
   const self = this;
   const backgroundImg = new Image();
 
   backgroundImg.addEventListener("load", function() {
-    self.setBackgroundImage(this);
+    self.backgroundImage.setBackgroundImage(this);
   });
 
   backgroundImg.src = path;
@@ -116,6 +93,29 @@ function BackgroundImage(imageDragger) {
   };
 
   this.imageDragger = imageDragger;
+}
+
+BackgroundImage.prototype.setBackgroundImage = function(image) {
+  this.image = image;
+
+  this.setDimensions(image.width, image.height);
+  this.setBackgroundMinPos();
+  this.resetLastPosition();
+  this.resetPosition();
+}
+
+// use the image dimensions to lock how far it can pan left/up without showing whitespace behind it
+BackgroundImage.prototype.setBackgroundMinPos = function() {
+  const backgroundSize = this.dimensions;
+  const backgroundWidth = backgroundSize.width;
+  const backgroundHeight = backgroundSize.height;
+
+  const canvasSize = this.imageDragger.uiManager.display.getCanvasSize();
+  const canvasWidth = canvasSize.width;
+  const canvasHeight = canvasSize.height;
+
+  this.minPosition.x = canvasWidth - backgroundWidth;
+  this.minPosition.y = canvasHeight - backgroundHeight;
 }
 
 BackgroundImage.prototype.setDimensions = function(width, height) {
