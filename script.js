@@ -237,6 +237,11 @@ function UiManager(imageDragger) {
   this.downloadLink = document.querySelector('#download-link');
 
   this.imageDragger = imageDragger;
+}
+
+UiManager.prototype.init = function() {
+  this.addEvents();
+
   this.display = new Display(this.canvas);
 }
 
@@ -362,7 +367,7 @@ Display.prototype.getCanvasSize = function() {
 function init() {
   const imageDragger = new ImageDragger();
 
-  imageDragger.uiManager.addEvents();
+  imageDragger.uiManager.init();
   imageDragger.loadBackgroundImage(DEFAULT_BACKGROUND_PATH);
 }
 
