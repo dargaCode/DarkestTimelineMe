@@ -21,7 +21,7 @@ ImageDragger.prototype.loadBackgroundImage = function(path) {
   const backgroundImg = new Image();
 
   backgroundImg.addEventListener("load", function() {
-    self.backgroundImage.setBackgroundImage(this);
+    self.backgroundImage.setImage(this);
   });
 
   backgroundImg.src = path;
@@ -95,7 +95,7 @@ function BackgroundImage(imageDragger) {
   this.imageDragger = imageDragger;
 }
 
-BackgroundImage.prototype.setBackgroundImage = function(image) {
+BackgroundImage.prototype.setImage = function(image) {
   this.image = image;
 
   this.setDimensions(image.width, image.height);
