@@ -105,6 +105,11 @@ BackgroundImage.prototype.setImage = function(image) {
   this.resetPosition();
 }
 
+BackgroundImage.prototype.setSize = function(width, height) {
+  this.size.width = width;
+  this.size.height = height;
+}
+
 // use the image size to lock how far it can pan left/up without showing whitespace behind it
 BackgroundImage.prototype.setBackgroundMinPos = function() {
   const backgroundSize = this.size;
@@ -117,11 +122,6 @@ BackgroundImage.prototype.setBackgroundMinPos = function() {
 
   this.minPosition.x = canvasWidth - backgroundWidth;
   this.minPosition.y = canvasHeight - backgroundHeight;
-}
-
-BackgroundImage.prototype.setSize = function(width, height) {
-  this.size.width = width;
-  this.size.height = height;
 }
 
 BackgroundImage.prototype.setLastPosition = function(x, y) {
