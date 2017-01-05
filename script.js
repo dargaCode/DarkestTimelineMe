@@ -114,28 +114,33 @@ BackgroundImage.prototype.setMinimumSize = function() {
   const imageWidth = image.width;
   const imageHeight = image.height;
 
+  const fitFactor = this.getCanvasFitFactor(imageWidth, imageHeight);
+
+  const minimumWidth = imageWidth * fitFactor;
+  const minimumHeight = imageHeight * fitFactor;
+
+  this.minimumSize.width = minimumWidth;
+  this.minimumSize.height = minimumHeight;
+
+  this.setSize(minimumWidth, minimumHeight);
+}
+
+BackgroundImage.prototype.getCanvasFitFactor = function(imageWidth, imageHeight) {
   const canvasSize = this.imageDragger.display.getCanvasSize();
   const canvasWidth = canvasSize.width;
   const canvasHeight = canvasSize.height;
 
   const widthFactor = canvasWidth / imageWidth;
   const heightFactor = canvasHeight / imageHeight;
-
-  var sizeFactor;
+  var fitFactor;
 
   if (imageWidth < imageHeight) {
-    sizeFactor = widthFactor;
+    fitFactor = widthFactor;
   } else {
-    sizeFactor = heightFactor;
+    fitFactor = heightFactor;
   }
 
-  const minimumWidth = imageWidth * sizeFactor;
-  const minimumHeight = imageHeight * sizeFactor;
-
-  this.minimumSize.width = minimumWidth;
-  this.minimumSize.height = minimumHeight;
-
-  this.setSize(minimumWidth, minimumHeight);
+  return fitFactor;
 }
 
 BackgroundImage.prototype.setSize = function(width, height) {
