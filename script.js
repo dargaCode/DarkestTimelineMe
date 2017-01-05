@@ -100,7 +100,6 @@ BackgroundImage.prototype.setImage = function(image) {
   this.image = image;
 
   this.setSize(image.width, image.height);
-  this.setBackgroundMinPos();
   this.resetLastPosition();
   this.resetPosition();
 }
@@ -108,6 +107,9 @@ BackgroundImage.prototype.setImage = function(image) {
 BackgroundImage.prototype.setSize = function(width, height) {
   this.size.width = width;
   this.size.height = height;
+
+  // make sure the image can't drag further in than the borders of the canvas
+  this.setBackgroundMinPos();
 }
 
 // use the image size to lock how far it can pan left/up without showing whitespace behind it
