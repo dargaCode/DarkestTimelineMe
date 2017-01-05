@@ -72,6 +72,10 @@ ImageDragger.prototype.generateNewBackgroundPos = function() {
 
 function BackgroundImage(imageDragger) {
   this.image = null;
+  this.minimumSize = {
+    width: null,
+    height: null,
+  };
   this.size = {
     width: null,
     height: null,
@@ -99,9 +103,39 @@ function BackgroundImage(imageDragger) {
 BackgroundImage.prototype.setImage = function(image) {
   this.image = image;
 
-  this.setSize(image.width, image.height);
+  this.setMinimumSize();
+  // reset drags properly between different images
   this.resetLastPosition();
   this.resetPosition();
+}
+
+BackgroundImage.prototype.setMinimumSize = function() {
+  const image = this.image;
+  const imageWidth = image.width;
+  const imageHeight = image.height;
+
+  const canvasSize = this.imageDragger.display.getCanvasSize();
+  const canvasWidth = canvasSize.width;
+  const canvasHeight = canvasSize.height;
+
+  const widthFactor = canvasWidth / imageWidth;
+  const heightFactor = canvasHeight / imageHeight;
+
+  var sizeFactor;
+
+  if (imageWidth < imageHeight) {
+    sizeFactor = widthFactor;
+  } else {
+    sizeFactor = heightFactor;
+  }
+
+  const minimumWidth = imageWidth * sizeFactor;
+  const minimumHeight = imageHeight * sizeFactor;
+
+  this.minimumSize.width = minimumWidth;
+  this.minimumSize.height = minimumHeight;
+
+  this.setSize(minimumWidth, minimumHeight);
 }
 
 BackgroundImage.prototype.setSize = function(width, height) {
