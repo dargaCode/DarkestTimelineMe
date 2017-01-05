@@ -72,7 +72,7 @@ ImageDragger.prototype.generateNewBackgroundPos = function() {
 
 function BackgroundImage(imageDragger) {
   this.image = null;
-  this.dimensions = {
+  this.size = {
     width: null,
     height: null,
   };
@@ -99,15 +99,15 @@ function BackgroundImage(imageDragger) {
 BackgroundImage.prototype.setImage = function(image) {
   this.image = image;
 
-  this.setDimensions(image.width, image.height);
+  this.setSize(image.width, image.height);
   this.setBackgroundMinPos();
   this.resetLastPosition();
   this.resetPosition();
 }
 
-// use the image dimensions to lock how far it can pan left/up without showing whitespace behind it
+// use the image size to lock how far it can pan left/up without showing whitespace behind it
 BackgroundImage.prototype.setBackgroundMinPos = function() {
-  const backgroundSize = this.dimensions;
+  const backgroundSize = this.size;
   const backgroundWidth = backgroundSize.width;
   const backgroundHeight = backgroundSize.height;
 
@@ -119,9 +119,9 @@ BackgroundImage.prototype.setBackgroundMinPos = function() {
   this.minPosition.y = canvasHeight - backgroundHeight;
 }
 
-BackgroundImage.prototype.setDimensions = function(width, height) {
-  this.dimensions.width = width;
-  this.dimensions.height = height;
+BackgroundImage.prototype.setSize = function(width, height) {
+  this.size.width = width;
+  this.size.height = height;
 }
 
 BackgroundImage.prototype.setLastPosition = function(x, y) {
@@ -339,8 +339,8 @@ Display.prototype.drawBackground = function(background) {
   const backgroundImage = background.image;
   const x = background.position.x;
   const y = background.position.y;
-  const imageWidth = background.dimensions.width;
-  const imageHeight = background.dimensions.height;
+  const imageWidth = background.size.width;
+  const imageHeight = background.size.height;
 
   // clear the background
   this.clearCanvas();
