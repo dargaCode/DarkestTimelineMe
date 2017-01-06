@@ -306,6 +306,8 @@ function UiManager(imageDragger) {
 
 UiManager.prototype.init = function() {
   this.addEvents();
+  //firefox doesn't automatically bottom out the slider on refresh. I think this is because it doesn't detect reloading as setting a new background.
+  this.resetSlider();
 }
 
 UiManager.prototype.addEvents = function() {
