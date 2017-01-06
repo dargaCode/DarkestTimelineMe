@@ -66,6 +66,10 @@ ImageDragger.prototype.generateNewBackgroundPos = function() {
   this.backgroundImage.setPosition(newX, newY);
 }
 
+ImageDragger.prototype.zoomBackgroundImage = function(factor) {
+  this.backgroundImage.scaleFromMinimum(factor);
+}
+
 // end ImageDragger class
 
 // BackgroundImage class
@@ -149,6 +153,7 @@ BackgroundImage.prototype.setSize = function(width, height) {
 
   // make sure the image can't drag further in than the borders of the canvas
   this.setBackgroundMinPos();
+  this.refreshPosition();
 }
 
 // use the image size to lock how far it can pan left/up without showing whitespace behind it
@@ -163,6 +168,14 @@ BackgroundImage.prototype.setBackgroundMinPos = function() {
 
   this.minPosition.x = canvasWidth - backgroundWidth;
   this.minPosition.y = canvasHeight - backgroundHeight;
+}
+
+BackgroundImage.prototype.scaleFromMinimum = function(factor) {
+  const minimumSize = this.minimumSize;
+  const newWidth = minimumSize.width * factor;
+  const newHeight = minimumSize.height * factor;
+
+  this.setSize(newWidth, newHeight);
 }
 
 BackgroundImage.prototype.setLastPosition = function(x, y) {
@@ -185,6 +198,13 @@ BackgroundImage.prototype.setPosition = function(x, y) {
 
 BackgroundImage.prototype.resetPosition = function() {
   this.setPosition(0, 0);
+}
+
+// Try to move image to where it currently is, which will trigger position revalidation. This prevents image from pulling withinthe canvas when scaling down.
+BackgroundImage.prototype.refreshPosition = function() {
+  const position = this.position;
+
+  this.setPosition(position.x, position.y);
 }
 
 BackgroundImage.prototype.getValidPosition = function(x, y) {
@@ -276,6 +296,7 @@ function UiManager(imageDragger) {
   this.canvas = document.querySelector('#canvas');
   this.fileInput = document.querySelector('#file-input');
   this.browseLink = document.querySelector('#browse-link');
+  this.zoomSlider = document.querySelector('#zoom-slider');
   this.downloadLink = document.querySelector('#download-link');
 
   this.imageDragger = imageDragger;
@@ -313,6 +334,10 @@ UiManager.prototype.addEvents = function() {
 
   this.browseLink.addEventListener('click', function(e) {
     self.transferClick(e);
+  });
+
+  this.zoomSlider.addEventListener('change', function() {
+    self.handleZoomChange(this.value);
   });
 
   this.downloadLink.addEventListener('click', function() {
@@ -356,6 +381,12 @@ UiManager.prototype.transferClick = function(e) {
   }
   // prevent navigation to "#"
   e.preventDefault();
+}
+
+UiManager.prototype.handleZoomChange = function(value) {
+  const zoomFactor = value / 100
+
+  this.imageDragger.zoomBackgroundImage(zoomFactor);
 }
 
 UiManager.prototype.handleDownloadClick = function(link) {
