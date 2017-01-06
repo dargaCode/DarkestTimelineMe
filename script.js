@@ -36,9 +36,11 @@ ImageDragger.prototype.dragBegin = function(startX, startY) {
 ImageDragger.prototype.drag = function(currentX, currentY) {
   this.cursor.setPosition(currentX, currentY);
 
+  const delta = this.cursor.generatePositionDelta();
+
   // background only moves if a drag is in progress
   if (this.dragging) {
-    this.generateNewBackgroundPos();
+    this.backgroundImage.generateNewBackgroundPos(delta);
   }
 }
 
@@ -54,16 +56,6 @@ ImageDragger.prototype.dragEnd = function() {
     // prepare background pos for next drag
     this.backgroundImage.propagatePosition();
   }
-}
-
-ImageDragger.prototype.generateNewBackgroundPos = function() {
-  const lastPosition = this.backgroundImage.lastPosition;
-  const delta = this.cursor.generatePositionDelta();
-
-  const newX = lastPosition.x + delta.x;
-  const newY = lastPosition.y + delta.y;
-
-  this.backgroundImage.setPosition(newX, newY);
 }
 
 ImageDragger.prototype.zoomBackgroundImage = function(factor) {
@@ -176,6 +168,14 @@ BackgroundImage.prototype.scaleFromMinimum = function(factor) {
   const newHeight = minimumSize.height * factor;
 
   this.setSize(newWidth, newHeight);
+}
+
+BackgroundImage.prototype.generateNewBackgroundPos = function(delta) {
+  const lastPosition = this.lastPosition;
+  const newX = lastPosition.x + delta.x;
+  const newY = lastPosition.y + delta.y;
+
+  this.setPosition(newX, newY);
 }
 
 BackgroundImage.prototype.setLastPosition = function(x, y) {
