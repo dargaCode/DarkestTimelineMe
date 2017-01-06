@@ -6,10 +6,17 @@ body {
 }
 
 canvas {
+  display: block;
   outline: 2px solid #222;
   background: #eee;
-  margin: 20px 0;
+  margin: 25px auto;
   cursor: pointer;
+}
+
+input {
+  display: block;
+  width: 200px;
+  margin: 0 auto 20px;
 }
 
 a {
@@ -17,6 +24,7 @@ a {
   color: #d8d8d8;
   font-size: 17px;
   text-decoration: none;
+  text-align: center;
   cursor: pointer;
   margin-top: 10px;
 }
