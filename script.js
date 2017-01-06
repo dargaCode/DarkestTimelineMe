@@ -371,6 +371,7 @@ UiManager.prototype.handleBrowseClick = function(files) {
     const imageURL = URL.createObjectURL(imageFile);
 
     this.imageDragger.loadBackgroundImage(imageURL);
+    this.resetSlider();
   }
 }
 
@@ -381,6 +382,11 @@ UiManager.prototype.transferClick = function(e) {
   }
   // prevent navigation to "#"
   e.preventDefault();
+}
+
+UiManager.prototype.resetSlider = function() {
+  // the real minimum is higher than 0, but 0 forces it to bottom out
+  this.zoomSlider.value = 0;
 }
 
 UiManager.prototype.handleZoomChange = function(value) {
