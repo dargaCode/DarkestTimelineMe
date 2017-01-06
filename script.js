@@ -23,6 +23,7 @@ ImageDragger.prototype.loadBackgroundImage = function(path) {
 
   backgroundImg.addEventListener("load", function() {
     self.backgroundImage.setImage(this);
+    self.refreshDisplay();
   });
 
   backgroundImg.src = path;
@@ -41,6 +42,7 @@ ImageDragger.prototype.drag = function(currentX, currentY) {
   // background only moves if a drag is in progress
   if (this.dragging) {
     this.backgroundImage.generateNewBackgroundPos(delta);
+    this.refreshDisplay();
   }
 }
 
@@ -60,6 +62,11 @@ ImageDragger.prototype.dragEnd = function() {
 
 ImageDragger.prototype.zoomBackgroundImage = function(factor) {
   this.backgroundImage.scaleFromMinimum(factor);
+  this.refreshDisplay();
+}
+
+ImageDragger.prototype.refreshDisplay = function() {
+  this.display.refresh(this.backgroundImage);
 }
 
 // end ImageDragger class
@@ -193,7 +200,6 @@ BackgroundImage.prototype.setPosition = function(x, y) {
 
   this.position.x = validatedPos.x;
   this.position.y = validatedPos.y;
-  this.imageDragger.display.drawBackground(this);
 }
 
 BackgroundImage.prototype.resetPosition = function() {
@@ -415,18 +421,20 @@ function Display(canvas) {
   this.canvasContext = canvas.getContext('2d');
 }
 
-Display.prototype.drawBackground = function(background) {
-  const backgroundImage = background.image;
-  const x = background.position.x;
-  const y = background.position.y;
-  const imageWidth = background.size.width;
-  const imageHeight = background.size.height;
-
-  // clear the background
+Display.prototype.refresh = function(backgroundImage) {
   this.clearCanvas();
+  this.drawBackground(backgroundImage);
+}
+
+Display.prototype.drawBackground = function(backgroundImage) {
+  const image = backgroundImage.image;
+  const x = backgroundImage.position.x;
+  const y = backgroundImage.position.y;
+  const imageWidth = backgroundImage.size.width;
+  const imageHeight = backgroundImage.size.height;
 
   // redraw the background
-  this.canvasContext.drawImage(backgroundImage, x, y, imageWidth, imageHeight);
+  this.canvasContext.drawImage(image, x, y, imageWidth, imageHeight);
 }
 
 Display.prototype.clearCanvas = function() {
