@@ -344,7 +344,7 @@ UiManager.prototype.addEvents = function() {
     self.transferClick(e);
   });
 
-  this.zoomSlider.addEventListener('change', function() {
+  this.zoomSlider.addEventListener('input', function() {
     self.handleZoomChange(this.value);
   });
 
