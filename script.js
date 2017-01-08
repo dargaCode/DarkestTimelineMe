@@ -170,11 +170,56 @@ BackgroundImage.prototype.setBackgroundMinPos = function() {
 }
 
 BackgroundImage.prototype.scaleFromMinimum = function(factor) {
+  const oldSizeFactor = this.size.width / this.minimumSize.width;
+  const factorChange = factor/oldSizeFactor;
+
+  // begin existing resize code
   const minimumSize = this.minimumSize;
   const newWidth = minimumSize.width * factor;
   const newHeight = minimumSize.height * factor;
 
   this.setSize(newWidth, newHeight);
+  // end existing resize code
+
+
+
+  const position = this.position;
+
+  const oldWidth = minimumSize.width * oldSizeFactor;
+  const oldHeight = minimumSize.height * oldSizeFactor;
+
+  // console.log('width change', newWidth, oldWidth);
+  // console.log('height change', newHeight, oldHeight);
+
+  const shiftX = newWidth - oldWidth;
+  const shiftY = newHeight - oldHeight;
+
+  // figure what proportion of image is at center
+
+  const oldX = position.x;
+  const oldY = position.y;
+
+  const canvasSize = this.imageDragger.display.getCanvasSize();
+  const canvasWidthCenter = canvasSize.width / 2;
+  const canvasHeightCenter = canvasSize.height / 2;
+
+  const oldXOffset = oldX * -1 + canvasWidthCenter;
+  const oldYOffset = oldY * -1 + canvasHeightCenter;
+
+  const widthProportion = oldXOffset / oldWidth;
+  const heightProportion = oldYOffset / oldHeight;
+
+  // console.log('shift x', shiftX, 'shift y', shiftY);
+
+  // console.log('width %', widthProportion, 'height %', heightProportion);
+
+
+  // shift only by the matching proportion
+  const scaledPosX = position.x - (shiftX * widthProportion);
+  const scaledPosY = position.y - (shiftY * heightProportion);
+
+  this.setPosition(scaledPosX, scaledPosY);
+  this.propagatePosition();
 }
 
 BackgroundImage.prototype.generateNewBackgroundPos = function(delta) {
