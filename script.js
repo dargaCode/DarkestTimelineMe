@@ -205,34 +205,20 @@ BackgroundImage.prototype.shiftResizedImage = function() {
   const widthDelta = sizeDelta.width;
   const heightDelta = sizeDelta.height;
 
-  // figure what proportion of image is at center
+  const offsetProportion = this.getImageOffsetProportion();
+  const widthProportion = offsetProportion.width;
+  const heightProportion = offsetProportion.height;
+
   const position = this.position;
   const oldX = position.x;
   const oldY = position.y;
 
-  const canvasSize = this.imageDragger.display.getCanvasSize();
-  const canvasWidthCenter = canvasSize.width / 2;
-  const canvasHeightCenter = canvasSize.height / 2;
-
-  const oldXOffset = oldX * -1 + canvasWidthCenter;
-  const oldYOffset = oldY * -1 + canvasHeightCenter;
-
-  const oldSize = this.lastSize;
-  const oldWidth = oldSize.width;
-  const oldHeight = oldSize.height;
-
-  const widthProportion = oldXOffset / oldWidth;
-  const heightProportion = oldYOffset / oldHeight;
-
-  // console.log('shift x', widthDelta, 'shift y', heightDelta);
-
-  // console.log('width %', widthProportion, 'height %', heightProportion);
-
   // shift only by the matching proportion
-  const shiftedPosX = position.x - (widthDelta * widthProportion);
-  const shiftedPosY = position.y - (heightDelta * heightProportion);
+  const shiftedPosX = oldX - (widthDelta * widthProportion);
+  const shiftedPosY = oldY - (heightDelta * heightProportion);
 
   this.setPosition(shiftedPosX, shiftedPosY);
+  // make sure the next drag starts from the new position
   this.propagatePosition();
 }
 
@@ -254,6 +240,37 @@ BackgroundImage.prototype.getSizeDelta = function() {
   };
 
   return sizeDelta;
+}
+
+// figure what proportion of image is at center of the viewport. this percentage will be used to zoom in on the same part of the image as the size increases.
+BackgroundImage.prototype.getImageOffsetProportion = function() {
+
+  const position = this.position;
+  const oldX = position.x;
+  const oldY = position.y;
+
+  const canvasSize = this.imageDragger.display.getCanvasSize();
+  const canvasWidthCenter = canvasSize.width / 2;
+  const canvasHeightCenter = canvasSize.height / 2;
+
+  // distance from image upper left to canvas center
+  // coordinates are always <= 0 so make them positive
+  const oldXOffset = oldX * -1 + canvasWidthCenter;
+  const oldYOffset = oldY * -1 + canvasHeightCenter;
+
+  const oldSize = this.lastSize;
+  const oldWidth = oldSize.width;
+  const oldHeight = oldSize.height;
+
+  const widthProportion = oldXOffset / oldWidth;
+  const heightProportion = oldYOffset / oldHeight;
+
+  const imageOffsetProportion = {
+    width: widthProportion,
+    height: heightProportion,
+  };
+
+  return imageOffsetProportion;
 }
 
 BackgroundImage.prototype.generateNewBackgroundPos = function(delta) {
