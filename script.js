@@ -170,32 +170,36 @@ BackgroundImage.prototype.setBackgroundMinPos = function() {
 }
 
 BackgroundImage.prototype.scaleFromMinimum = function(factor) {
-  const oldSizeFactor = this.size.width / this.minimumSize.width;
+  const minimumSize = this.minimumSize;
+
+  const oldSizeFactor = this.size.width / minimumSize.width;
   const factorChange = factor/oldSizeFactor;
 
-  // begin existing resize code
-  const minimumSize = this.minimumSize;
   const newWidth = minimumSize.width * factor;
   const newHeight = minimumSize.height * factor;
 
   this.setSize(newWidth, newHeight);
-  // end existing resize code
+  this.shiftResizedImage(oldSizeFactor, factor);
+}
 
-
-
-  const position = this.position;
-
+BackgroundImage.prototype.shiftResizedImage = function(oldSizeFactor, newSizeFactor) {
+  const minimumSize = this.minimumSize;
   const oldWidth = minimumSize.width * oldSizeFactor;
   const oldHeight = minimumSize.height * oldSizeFactor;
 
   // console.log('width change', newWidth, oldWidth);
   // console.log('height change', newHeight, oldHeight);
 
-  const shiftX = newWidth - oldWidth;
-  const shiftY = newHeight - oldHeight;
+  const size = this.size;
+  const width = size.width;
+  const height = size.height;
+
+  const shiftX = width - oldWidth;
+  const shiftY = height - oldHeight;
 
   // figure what proportion of image is at center
 
+  const position = this.position;
   const oldX = position.x;
   const oldY = position.y;
 
