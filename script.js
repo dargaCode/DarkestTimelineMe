@@ -233,10 +233,10 @@ BackgroundImage.prototype.shiftResizedImage = function() {
 
 
   // shift only by the matching proportion
-  const scaledPosX = position.x - (widthDelta * widthProportion);
-  const scaledPosY = position.y - (heightDelta * heightProportion);
+  const shiftedPosX = position.x - (widthDelta * widthProportion);
+  const shiftedPosY = position.y - (heightDelta * heightProportion);
 
-  this.setPosition(scaledPosX, scaledPosY);
+  this.setPosition(shiftedPosX, shiftedPosY);
   this.propagatePosition();
 }
 
