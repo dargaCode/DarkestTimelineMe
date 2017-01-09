@@ -209,13 +209,17 @@ BackgroundImage.prototype.shiftResizedImage = function() {
   const widthProportion = offsetProportion.width;
   const heightProportion = offsetProportion.height;
 
+  // only shift the image by a proportion of the size delta, so that the image stays centered on the same spot, zooming in and out
+  const deltaX = widthDelta * widthProportion;
+  const deltaY = heightDelta * heightProportion;
+
   const position = this.position;
   const oldX = position.x;
   const oldY = position.y;
 
-  // shift only by the matching proportion
-  const shiftedPosX = oldX - (widthDelta * widthProportion);
-  const shiftedPosY = oldY - (heightDelta * heightProportion);
+  // when the image gets bigger, the position gets smaller. this is because the image position is the upper left corner
+  const shiftedPosX = oldX - deltaX;
+  const shiftedPosY = oldY - deltaY;
 
   this.setPosition(shiftedPosX, shiftedPosY);
   // make sure the next drag starts from the new position
