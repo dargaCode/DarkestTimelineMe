@@ -79,6 +79,10 @@ function BackgroundImage(imageDragger) {
     width: null,
     height: null,
   };
+  this.lastSize = {
+    width: null,
+    height: null,
+  }
   this.size = {
     width: null,
     height: null,
@@ -155,6 +159,17 @@ BackgroundImage.prototype.setSize = function(width, height) {
   this.refreshPosition();
 }
 
+BackgroundImage.prototype.setLastSize = function(width, height) {
+  this.lastSize.width = width;
+  this.lastSize.height = height;
+}
+
+BackgroundImage.prototype.propagateSize = function() {
+  const size = this.size;
+
+  this.setLastSize(size.width, size.height);
+}
+
 // use the image size to lock how far it can pan left/up without showing whitespace behind it
 BackgroundImage.prototype.setBackgroundMinPos = function() {
   const backgroundSize = this.size;
@@ -169,26 +184,26 @@ BackgroundImage.prototype.setBackgroundMinPos = function() {
   this.minPosition.y = canvasHeight - backgroundHeight;
 }
 
-BackgroundImage.prototype.scaleFromMinimum = function(factor) {
+BackgroundImage.prototype.scaleFromMinimum = function(sizeFactor) {
+  // store size as lastSize so that they can be compared later
+  this.propagateSize();
+
   const minimumSize = this.minimumSize;
+  const minimumWidth = minimumSize.width;
+  const minimumHeight = minimumSize.height;
 
-  const oldSizeFactor = this.size.width / minimumSize.width;
-  const factorChange = factor/oldSizeFactor;
-
-  const newWidth = minimumSize.width * factor;
-  const newHeight = minimumSize.height * factor;
+  const newWidth = minimumWidth * sizeFactor;
+  const newHeight = minimumHeight * sizeFactor;
 
   this.setSize(newWidth, newHeight);
-  this.shiftResizedImage(oldSizeFactor, factor);
+  // make sure image zooms in on the center of the canvas
+  this.shiftResizedImage();
 }
 
-BackgroundImage.prototype.shiftResizedImage = function(oldSizeFactor, newSizeFactor) {
-  const minimumSize = this.minimumSize;
-  const oldWidth = minimumSize.width * oldSizeFactor;
-  const oldHeight = minimumSize.height * oldSizeFactor;
-
-  // console.log('width change', newWidth, oldWidth);
-  // console.log('height change', newHeight, oldHeight);
+BackgroundImage.prototype.shiftResizedImage = function() {
+  const lastSize = this.lastSize;
+  const oldWidth = lastSize.width;
+  const oldHeight = lastSize.height;
 
   const size = this.size;
   const width = size.width;
@@ -198,7 +213,6 @@ BackgroundImage.prototype.shiftResizedImage = function(oldSizeFactor, newSizeFac
   const shiftY = height - oldHeight;
 
   // figure what proportion of image is at center
-
   const position = this.position;
   const oldX = position.x;
   const oldY = position.y;
