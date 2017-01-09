@@ -209,8 +209,8 @@ BackgroundImage.prototype.shiftResizedImage = function() {
   const width = size.width;
   const height = size.height;
 
-  const shiftX = width - oldWidth;
-  const shiftY = height - oldHeight;
+  const widthDelta = width - oldWidth;
+  const heightDelta = height - oldHeight;
 
   // figure what proportion of image is at center
   const position = this.position;
@@ -227,14 +227,14 @@ BackgroundImage.prototype.shiftResizedImage = function() {
   const widthProportion = oldXOffset / oldWidth;
   const heightProportion = oldYOffset / oldHeight;
 
-  // console.log('shift x', shiftX, 'shift y', shiftY);
+  // console.log('shift x', widthDelta, 'shift y', heightDelta);
 
   // console.log('width %', widthProportion, 'height %', heightProportion);
 
 
   // shift only by the matching proportion
-  const scaledPosX = position.x - (shiftX * widthProportion);
-  const scaledPosY = position.y - (shiftY * heightProportion);
+  const scaledPosX = position.x - (widthDelta * widthProportion);
+  const scaledPosY = position.y - (heightDelta * heightProportion);
 
   this.setPosition(scaledPosX, scaledPosY);
   this.propagatePosition();
