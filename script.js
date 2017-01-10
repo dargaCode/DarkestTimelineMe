@@ -2,16 +2,16 @@
 //CONSTANTS
 
 const DEFAULT_BACKGROUND_PATH = 'background.jpg';
-const BEARD_IMAGE_PATH = 'beard.png';
+const OVERLAY_IMAGE_PATH = 'beard.png';
 
 // CLASSES
 
 // ImageDragger class
 
-function ImageDragger(beardImagePath) {
+function ImageDragger(overlayImagePath) {
   this.dragging = false;
 
-  this.beardImagePath = beardImagePath;
+  this.overlayImagePath = overlayImagePath;
   this.backgroundImage = new BackgroundImage(this);
   this.cursor = new Cursor();
   this.uiManager = new UiManager(this);
@@ -22,27 +22,27 @@ ImageDragger.prototype.loadBackgroundImage = function(path) {
   // need to have access to the ImageDragger and the loaded Image at the same time.
   const self = this;
   const backgroundImg = new Image();
-  const beardImagePath = this.beardImagePath;
 
   backgroundImg.addEventListener("load", function() {
     self.backgroundImage.setImage(this);
-    self.loadBeardImage(beardImagePath);
+    self.loadOverlayImage();
   });
 
   backgroundImg.src = path;
 }
 
-ImageDragger.prototype.loadBeardImage = function(path) {
+ImageDragger.prototype.loadOverlayImage = function() {
   // need to have access to the ImageDragger and the loaded Image at the same time.
   const self = this;
-  const beardImage = new Image();
+  const overlayImagePath = this.overlayImagePath;
+  const overlayImage = new Image();
 
-  beardImage.addEventListener("load", function() {
-    self.display.setBeardImage(this);
+  overlayImage.addEventListener("load", function() {
+    self.display.setOverlayImage(this);
     self.refreshDisplay();
   });
 
-  beardImage.src = path;
+  overlayImage.src = overlayImagePath;
 }
 
 ImageDragger.prototype.dragBegin = function(startX, startY) {
@@ -530,7 +530,7 @@ UiManager.prototype.handleDownloadClick = function(link) {
 // Display class
 
 function Display(canvas) {
-  this.beardImage = null;
+  this.overlayImage = null;
   this.canvasSize = {
     width: canvas.width,
     height: canvas.height,
@@ -541,11 +541,11 @@ function Display(canvas) {
 Display.prototype.refresh = function(backgroundImage) {
   this.clearCanvas();
   this.drawBackground(backgroundImage);
-  this.drawBeardImage();
+  this.drawOverlayImage();
 }
 
-Display.prototype.setBeardImage = function(beardImage) {
-  this.beardImage = beardImage;
+Display.prototype.setOverlayImage = function(overlayImage) {
+  this.overlayImage = overlayImage;
 }
 
 Display.prototype.drawBackground = function(backgroundImage) {
@@ -559,10 +559,10 @@ Display.prototype.drawBackground = function(backgroundImage) {
   this.canvasContext.drawImage(image, x, y, imageWidth, imageHeight);
 }
 
-Display.prototype.drawBeardImage = function() {
-  const beardImage = this.beardImage;
+Display.prototype.drawOverlayImage = function() {
+  const overlayImage = this.overlayImage;
 
-  this.canvasContext.drawImage(beardImage, 110, 200, 200, 200);
+  this.canvasContext.drawImage(overlayImage, 110, 200, 200, 200);
 }
 
 Display.prototype.clearCanvas = function() {
@@ -582,7 +582,7 @@ Display.prototype.getCanvasSize = function() {
 //FUNCTIONS
 
 function init() {
-  const imageDragger = new ImageDragger(BEARD_IMAGE_PATH);
+  const imageDragger = new ImageDragger(OVERLAY_IMAGE_PATH);
 
   imageDragger.loadBackgroundImage(DEFAULT_BACKGROUND_PATH);
 }
