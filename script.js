@@ -1,7 +1,8 @@
 
 //CONSTANTS
 
-const DEFAULT_BACKGROUND_PATH = 'background.jpg'
+const DEFAULT_BACKGROUND_PATH = 'background.jpg';
+const BEARD_IMAGE_PATH = 'beard.png';
 
 // CLASSES
 
@@ -27,6 +28,19 @@ ImageDragger.prototype.loadBackgroundImage = function(path) {
   });
 
   backgroundImg.src = path;
+}
+
+ImageDragger.prototype.loadBeardImage = function(path) {
+  // need to have access to the ImageDragger and the loaded Image at the same time.
+  const self = this;
+  const beardImage = new Image();
+
+  beardImage.addEventListener("load", function() {
+    self.display.setBeardImage(this);
+    self.refreshDisplay();
+  });
+
+  beardImage.src = path;
 }
 
 ImageDragger.prototype.dragBegin = function(startX, startY) {
@@ -514,6 +528,7 @@ UiManager.prototype.handleDownloadClick = function(link) {
 // Display class
 
 function Display(canvas) {
+  this.beardImage = null;
   this.canvasSize = {
     width: canvas.width,
     height: canvas.height,
@@ -524,6 +539,11 @@ function Display(canvas) {
 Display.prototype.refresh = function(backgroundImage) {
   this.clearCanvas();
   this.drawBackground(backgroundImage);
+  this.drawBeardImage();
+}
+
+Display.prototype.setBeardImage = function(beardImage) {
+  this.beardImage = beardImage;
 }
 
 Display.prototype.drawBackground = function(backgroundImage) {
@@ -535,6 +555,12 @@ Display.prototype.drawBackground = function(backgroundImage) {
 
   // redraw the background
   this.canvasContext.drawImage(image, x, y, imageWidth, imageHeight);
+}
+
+Display.prototype.drawBeardImage = function() {
+  const beardImage = this.beardImage;
+
+  this.canvasContext.drawImage(beardImage, 110, 200, 200, 200);
 }
 
 Display.prototype.clearCanvas = function() {
@@ -557,6 +583,7 @@ function init() {
   const imageDragger = new ImageDragger();
 
   imageDragger.loadBackgroundImage(DEFAULT_BACKGROUND_PATH);
+  imageDragger.loadBeardImage(BEARD_IMAGE_PATH);
 }
 
 //MAIN
