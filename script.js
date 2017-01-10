@@ -562,7 +562,7 @@ Display.prototype.drawBackground = function(backgroundImage) {
 Display.prototype.drawOverlayImage = function() {
   const overlayImage = this.overlayImage;
 
-  this.canvasContext.drawImage(overlayImage, 110, 200, 200, 200);
+  this.canvasContext.drawImage(overlayImage, 100, 200, 200, 200);
 }
 
 Display.prototype.clearCanvas = function() {
