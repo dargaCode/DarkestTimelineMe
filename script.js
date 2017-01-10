@@ -18,31 +18,39 @@ function ImageDragger(overlayImagePath) {
   this.display = new Display(this.uiManager.canvas);
 }
 
-ImageDragger.prototype.loadBackgroundImage = function(path) {
+ImageDragger.prototype.loadBackgroundImage = function(backgroundPath) {
   // need to have access to the ImageDragger and the loaded Image at the same time.
   const self = this;
-  const backgroundImg = new Image();
 
-  backgroundImg.addEventListener("load", function() {
-    self.backgroundImage.setImage(this);
+  this.loadImage(backgroundPath, function(loadedImage) {
+    self.backgroundImage.setImage(loadedImage);
+    // load overlay from the same callback so they are both available at the same time.
     self.loadOverlayImage();
   });
-
-  backgroundImg.src = path;
 }
 
 ImageDragger.prototype.loadOverlayImage = function() {
   // need to have access to the ImageDragger and the loaded Image at the same time.
   const self = this;
   const overlayImagePath = this.overlayImagePath;
-  const overlayImage = new Image();
 
-  overlayImage.addEventListener("load", function() {
-    self.display.setOverlayImage(this);
+  this.loadImage(overlayImagePath, function(loadedImage) {
+    self.display.setOverlayImage(loadedImage);
+    // don't refresh display until both background and overlay images are loaded. This prevents an error.
     self.refreshDisplay();
   });
+}
 
-  overlayImage.src = overlayImagePath;
+// don't try to do things with images until they are actually loaded.
+ImageDragger.prototype.loadImage = function(imagePath, callback) {
+  const image = new Image();
+
+  image.addEventListener("load", function() {
+    // callback needs access to the image object
+    callback(this);
+  });
+
+  image.src = imagePath;
 }
 
 ImageDragger.prototype.dragBegin = function(startX, startY) {
