@@ -8,9 +8,10 @@ const BEARD_IMAGE_PATH = 'beard.png';
 
 // ImageDragger class
 
-function ImageDragger() {
+function ImageDragger(beardImagePath) {
   this.dragging = false;
 
+  this.beardImagePath = beardImagePath;
   this.backgroundImage = new BackgroundImage(this);
   this.cursor = new Cursor();
   this.uiManager = new UiManager(this);
@@ -21,10 +22,11 @@ ImageDragger.prototype.loadBackgroundImage = function(path) {
   // need to have access to the ImageDragger and the loaded Image at the same time.
   const self = this;
   const backgroundImg = new Image();
+  const beardImagePath = this.beardImagePath;
 
   backgroundImg.addEventListener("load", function() {
     self.backgroundImage.setImage(this);
-    self.refreshDisplay();
+    self.loadBeardImage(beardImagePath);
   });
 
   backgroundImg.src = path;
@@ -580,10 +582,9 @@ Display.prototype.getCanvasSize = function() {
 //FUNCTIONS
 
 function init() {
-  const imageDragger = new ImageDragger();
+  const imageDragger = new ImageDragger(BEARD_IMAGE_PATH);
 
   imageDragger.loadBackgroundImage(DEFAULT_BACKGROUND_PATH);
-  imageDragger.loadBeardImage(BEARD_IMAGE_PATH);
 }
 
 //MAIN
