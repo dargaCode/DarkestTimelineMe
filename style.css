@@ -1,32 +1,67 @@
 
+/*GLOBAL*/
+
 body {
   background: #666;
   margin: 20px;
   padding: 0;
 }
 
+h1 {
+  text-align: center;
+  color: #222;
+  margin: 40px 0 20px;
+}
+
+/*CANVAS*/
+
 canvas {
   display: block;
   outline: 2px solid #222;
   background: #eee;
-  margin: 25px auto;
-  cursor: pointer;
+  margin: 0 auto 22px;
+  cursor: move;
 }
 
-input {
-  display: block;
-  width: 200px;
+/*SLIDER*/
+
+.slider-group {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  width: 275px;
   margin: 0 auto 20px;
+  padding: 5px 12px 8px;
+  border-radius: 50px;
+  color: #d8d8d8;
+  background: #3c3c3c;
 }
+
+.slider-group input {
+  width: 200px;
+  margin: 0 9px;
+  cursor: move;
+}
+
+.slider-group label {
+  /*cursor: pointer;*/
+}
+
+.slider-group label.minus {
+  font-size: 26px;
+}
+
+/*LINKS*/
 
 a {
   display: block;
-  color: #d8d8d8;
+  text-align: center;
   font-size: 17px;
   text-decoration: none;
-  text-align: center;
+  width: 200px;
+  margin: 10px auto;
+  color: #d8d8d8;
   cursor: pointer;
-  margin-top: 10px;
 }
 
 a:hover {
