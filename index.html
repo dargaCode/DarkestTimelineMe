@@ -7,11 +7,21 @@
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
+  <header>
+    <h1>Darkest Timeline Me</h1>
+  </header>
 
   <canvas id="canvas" width="400" height="400"></canvas>
 
-  <!-- max controls the max zoom percent of the image -->
-  <input type="range" id="zoom-slider" min="100" max="300" value="100">
+  <div class="slider-group">
+    <label class="minus">&ndash;</label>
+
+    <!-- max property controls the max zoom percent of the image -->
+    <input type="range" id="zoom-slider" min="100" max="300" value="100">
+
+    <label class="plus">+</label>
+  </div>
+
 
   <input type="file" id="file-input" accept="image/*" style="display: none">
 
