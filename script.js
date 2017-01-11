@@ -427,6 +427,8 @@ function UiManager(imageDragger) {
   this.fileInput = document.querySelector('#file-input');
   this.browseLink = document.querySelector('#browse-link');
   this.zoomSlider = document.querySelector('#zoom-slider');
+  this.minusButton = document.querySelector('#minus-button');
+  this.plusButton = document.querySelector('#plus-button');
   this.downloadLink = document.querySelector('#download-link');
 
   this.imageDragger = imageDragger;
@@ -470,6 +472,14 @@ UiManager.prototype.addEvents = function() {
 
   this.zoomSlider.addEventListener('input', function() {
     self.handleZoomChange(this.value);
+  });
+
+  this.minusButton.addEventListener('click', function() {
+    console.log('minus!');
+  });
+
+  this.plusButton.addEventListener('click', function() {
+    console.log('plus!');
   });
 
   this.downloadLink.addEventListener('click', function() {
