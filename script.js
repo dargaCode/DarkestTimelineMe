@@ -423,6 +423,9 @@ Cursor.prototype.generatePositionDelta = function() {
 // UiManager class
 
 function UiManager(imageDragger) {
+  this.MIN_ZOOM_FACTOR = 1;
+  this.MAX_ZOOM_FACTOR = 3;
+
   this.canvas = document.querySelector('#canvas');
   this.fileInput = document.querySelector('#file-input');
   this.browseLink = document.querySelector('#browse-link');
@@ -471,7 +474,11 @@ UiManager.prototype.addEvents = function() {
   });
 
   this.zoomSlider.addEventListener('input', function() {
-    self.handleZoomChange(this.value);
+    const value = this.value;
+    const max = this.max;
+    const sliderPercent = value / max;
+
+    self.handleZoomChange(sliderPercent);
   });
 
   this.minusButton.addEventListener('click', function() {
@@ -531,8 +538,11 @@ UiManager.prototype.resetSlider = function() {
   this.zoomSlider.value = 0;
 }
 
-UiManager.prototype.handleZoomChange = function(value) {
-  const zoomFactor = value / 100
+UiManager.prototype.handleZoomChange = function(sliderPercent) {
+  const minZoomFactor = this.MIN_ZOOM_FACTOR;
+  const maxZoomFactor = this.MAX_ZOOM_FACTOR;
+  const zoomRange = maxZoomFactor - minZoomFactor;
+  const zoomFactor = minZoomFactor + zoomRange * sliderPercent;
 
   this.imageDragger.zoomBackgroundImage(zoomFactor);
 }
