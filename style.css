@@ -14,6 +14,16 @@ h1 {
   margin: 34px 0 15px;
 }
 
+a {
+  text-decoration: none;
+  color: #d8d8d8;
+  cursor: pointer;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 /*CANVAS*/
 
 canvas {
@@ -44,27 +54,20 @@ canvas {
   cursor: move;
 }
 
-.slider-group label {
-  /*cursor: pointer;*/
+.slider-group a:hover {
+  text-decoration: none;
 }
 
-.slider-group label.minus-button {
+.slider-group a.minus-button {
   font-size: 26px;
 }
 
-/*LINKS*/
+/*BUTTONS*/
 
-a {
+.buttons a {
   display: block;
   text-align: center;
   font-size: 17px;
-  text-decoration: none;
   width: 200px;
   margin: 10px auto;
-  color: #d8d8d8;
-  cursor: pointer;
-}
-
-a:hover {
-  text-decoration: underline;
 }

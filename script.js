@@ -478,10 +478,11 @@ UiManager.prototype.addEvents = function() {
     self.handleZoomChange(this);
   });
 
-  this.minusButton.addEventListener('click', function() {
+  this.minusButton.addEventListener('click', function(e) {
     const zoomIncrementcount = -1;
 
     self.handleZoomButtonClick(self.zoomSlider, zoomIncrementcount);
+
   });
 
   this.plusButton.addEventListener('click', function() {

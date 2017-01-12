@@ -14,22 +14,22 @@
   <canvas id="canvas" width="400" height="400"></canvas>
 
   <div class="slider-group">
-    <label id="minus-button" class="minus-button">&ndash;</label>
+    <a id="minus-button" class="minus-button" href="#">&ndash;</a>
 
     <input type="range" id="zoom-slider" min="0" max="200" value="0">
 
-    <label id="plus-button" class="plus-button">+</label>
+    <a id="plus-button" class="plus-button" href="#">+</a>
   </div>
 
+  <div class="buttons">
+    <input type="file" id="file-input" accept="image/*" style="display: none">
 
-  <input type="file" id="file-input" accept="image/*" style="display: none">
+    <!-- visible link will trigger hidden input via event -->
+    <a href="#" id="browse-link">Browse Photos</a>
 
-  <!-- visible link will trigger hidden input via event -->
-  <a href="#" id="browse-link">Browse Photos</a>
+    <a id="download-link" class="download-link" download="darkest-timeline-me.png">Download Evil Image</a>
 
-  <a id="download-link" class="download-link" download="darkest-timeline-me.png">Download Evil Image</a>
-
-  <script type="text/javascript" src="script.js"></script>
-
+    <script type="text/javascript" src="script.js"></script>
+  </div>
 </body>
 </html>
