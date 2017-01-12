@@ -54,6 +54,21 @@ canvas {
   cursor: move;
 }
 
+/*Firefox slider*/
+.slider-group input::-moz-range-track {
+  /*margin-top: 7px;*/
+  border-radius: 2px;
+  height: 5px;
+  /*border: 1px solid #bdc3c7;*/
+  background-color: #aaa;
+}
+
+.slider-group input::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border-radius: 10px;
+}
+
 .slider-group a:hover {
   text-decoration: none;
 }
