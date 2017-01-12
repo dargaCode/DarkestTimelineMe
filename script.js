@@ -425,6 +425,7 @@ Cursor.prototype.generatePositionDelta = function() {
 function UiManager(imageDragger) {
   this.MIN_ZOOM_FACTOR = 1;
   this.MAX_ZOOM_FACTOR = 3;
+  this.ZOOM_BUTTON_CLICKS_TO_MAX = 10;
 
   this.canvas = document.querySelector('#canvas');
   this.fileInput = document.querySelector('#file-input');
@@ -478,11 +479,15 @@ UiManager.prototype.addEvents = function() {
   });
 
   this.minusButton.addEventListener('click', function() {
-    console.log('minus!');
+    const zoomIncrementcount = -1;
+
+    self.handleZoomButtonClick(self.zoomSlider, zoomIncrementcount);
   });
 
   this.plusButton.addEventListener('click', function() {
-    console.log('plus!');
+    const zoomIncrementcount = 1;
+
+    self.handleZoomButtonClick(self.zoomSlider, zoomIncrementcount);
   });
 
   this.downloadLink.addEventListener('click', function() {
@@ -550,6 +555,43 @@ UiManager.prototype.getSliderPercent = function(slider) {
   const sliderPercent = value / max;
 
   return sliderPercent;
+}
+
+UiManager.prototype.handleZoomButtonClick = function(slider, incrementCount) {
+  const newPosition = this.getIncrementedPosition(slider, incrementCount);
+
+  slider.value = newPosition;
+  this.handleZoomChange(slider)
+}
+
+UiManager.prototype.getIncrementedPosition = function(slider, incrementCount) {
+  const incrementRange = this.getIncrementSize(slider);
+  const position = Number(slider.value);
+  const min = Number(slider.min);
+  const max = Number(slider.max);
+  const positionDelta = incrementRange * incrementCount;
+  const nextIncrement = position + positionDelta;
+
+  let newPosition = nextIncrement;
+
+  if (newPosition > max) {
+    newPosition = max;
+  }
+  if (newPosition < min){
+    newPosition = min;
+  }
+
+  return newPosition;
+}
+
+UiManager.prototype.getIncrementSize = function(slider) {
+  const min = Number(slider.min);
+  const max = Number(slider.max);
+  const sliderRange = max - min;
+  const incrementsPerSlider = this.ZOOM_BUTTON_CLICKS_TO_MAX;
+  const incrementRange = sliderRange / incrementsPerSlider;
+
+  return incrementRange;
 }
 
 UiManager.prototype.handleDownloadClick = function(link) {
