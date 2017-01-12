@@ -483,12 +483,17 @@ UiManager.prototype.addEvents = function() {
 
     self.handleZoomButtonClick(self.zoomSlider, zoomIncrementcount);
 
+    // don't navigate to /#
+    e.preventDefault();
   });
 
-  this.plusButton.addEventListener('click', function() {
+  this.plusButton.addEventListener('click', function(e) {
     const zoomIncrementcount = 1;
 
     self.handleZoomButtonClick(self.zoomSlider, zoomIncrementcount);
+
+    // don't navigate to /#
+    e.preventDefault();
   });
 
   this.downloadLink.addEventListener('click', function() {
