@@ -474,11 +474,7 @@ UiManager.prototype.addEvents = function() {
   });
 
   this.zoomSlider.addEventListener('input', function() {
-    const value = this.value;
-    const max = this.max;
-    const sliderPercent = value / max;
-
-    self.handleZoomChange(sliderPercent);
+    self.handleZoomChange(this);
   });
 
   this.minusButton.addEventListener('click', function() {
@@ -538,13 +534,22 @@ UiManager.prototype.resetSlider = function() {
   this.zoomSlider.value = 0;
 }
 
-UiManager.prototype.handleZoomChange = function(sliderPercent) {
+UiManager.prototype.handleZoomChange = function(slider) {
   const minZoomFactor = this.MIN_ZOOM_FACTOR;
   const maxZoomFactor = this.MAX_ZOOM_FACTOR;
   const zoomRange = maxZoomFactor - minZoomFactor;
+  const sliderPercent = this.getSliderPercent(slider);
   const zoomFactor = minZoomFactor + zoomRange * sliderPercent;
 
   this.imageDragger.zoomBackgroundImage(zoomFactor);
+}
+
+UiManager.prototype.getSliderPercent = function(slider) {
+  const value = Number(slider.value);
+  const max = Number(slider.max);
+  const sliderPercent = value / max;
+
+  return sliderPercent;
 }
 
 UiManager.prototype.handleDownloadClick = function(link) {
