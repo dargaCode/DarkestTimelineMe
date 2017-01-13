@@ -11,29 +11,31 @@
     <h1>Darkest Timeline Me</h1>
   </header>
 
-  <canvas id="canvas" width="400" height="400"></canvas>
+  <div class="container">
+    <canvas id="canvas" width="400" height="400"></canvas>
 
-  <div class="slider-group">
-    <div class="frame">
-      <a id="minus-button" class="minus-button" href="#">&ndash;</a>
+    <div class="slider-group">
+      <div class="frame">
+        <a id="minus-button" class="minus-button" href="#">&ndash;</a>
 
-      <input type="range" id="zoom-slider" min="0" max="200" value="0">
+        <input type="range" id="zoom-slider" min="0" max="200" value="0">
 
-      <a id="plus-button" class="plus-button" href="#">+</a>
+        <a id="plus-button" class="plus-button" href="#">+</a>
+      </div>
+
+      <label>Zoom</label>
     </div>
 
-    <label>Zoom</label>
-  </div>
+    <div class="buttons">
+      <input type="file" id="file-input" accept="image/*" style="display: none">
 
-  <div class="buttons">
-    <input type="file" id="file-input" accept="image/*" style="display: none">
+      <!-- visible link will trigger hidden input via event -->
+      <a href="#" id="browse-link">Browse Photos</a>
 
-    <!-- visible link will trigger hidden input via event -->
-    <a href="#" id="browse-link">Browse Photos</a>
+      <a id="download-link" class="download-link" download="darkest-timeline-me.png">Download Evil Image</a>
 
-    <a id="download-link" class="download-link" download="darkest-timeline-me.png">Download Evil Image</a>
-
-    <script type="text/javascript" src="script.js"></script>
+      <script type="text/javascript" src="script.js"></script>
+    </div>
   </div>
 </body>
 </html>

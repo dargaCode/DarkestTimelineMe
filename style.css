@@ -1,17 +1,18 @@
 
 /*GLOBAL*/
 
-body {
-  background: #666;
-  margin: 20px;
+html, body {
+  height: 100%;
+  margin: 0;
   padding: 0;
+  background: #3c3c3c;
 }
 
 h1 {
   text-align: center;
-  font-size: 38px;
+  font-size: 46px;
   color: #222;
-  margin: 34px 0 15px;
+  margin: 50px 0 0;
 }
 
 a {
@@ -22,6 +23,27 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+/*CONTAINER*/
+
+.container {
+  max-width: 700px;
+  height: 580px;
+  margin: 0 auto;
+  padding-top: 2px;
+  background: #666;
+  /*prevent margin collapse with children*/
+  overflow: hidden;
+}
+
+/*HEADER*/
+
+header {
+  height: 160px;
+  background: #666;
+  /*prevent margin collapse with children*/
+  overflow: hidden;
 }
 
 /*CANVAS*/
@@ -60,10 +82,8 @@ canvas {
 
 /*Firefox slider*/
 .slider-group input::-moz-range-track {
-  /*margin-top: 7px;*/
   border-radius: 2px;
   height: 5px;
-  /*border: 1px solid #bdc3c7;*/
   background-color: #aaa;
 }
 
