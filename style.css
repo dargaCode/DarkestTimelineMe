@@ -38,14 +38,18 @@ canvas {
 
 .slider-group {
   text-align: center;
+  margin-bottom: 12px;
+}
+
+.slider-group .frame {
   font-size: 28px;
   font-weight: bold;
   width: 275px;
-  margin: 0 auto 20px;
+  margin: 0 auto 3px;
   padding: 5px 12px 8px;
   border-radius: 50px;
-  color: #d8d8d8;
   background: #3c3c3c;
+  color: #d8d8d8;
 }
 
 .slider-group input {
@@ -75,6 +79,13 @@ canvas {
 
 .slider-group a.minus-button {
   font-size: 26px;
+  position: relative;
+  bottom: 1px;
+}
+
+.slider-group label {
+  display: block;
+  color: #222;
 }
 
 /*BUTTONS*/
