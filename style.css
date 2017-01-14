@@ -82,7 +82,7 @@ canvas {
   text-align: center;
   font-size: 28px;
   font-weight: bold;
-  width: 400px;
+  width: 404px;
   margin: 0 auto 15px;
   padding: 5px 12px 8px;
   border-radius: 12px;
@@ -129,13 +129,15 @@ canvas {
 .buttons {
   text-align: center;
   margin-top: 20px;
+  /*remove space between inline-block elements*/
+  font-size: 0;
 }
 
 .buttons a {
   display: inline-block;
   text-align: center;
   font-size: 18px;
-  width: 190px;
+  width: 195px;
   padding: 15px 0;
   border-radius: 10px;
   color: #d8d8d8;
@@ -145,7 +147,7 @@ canvas {
 }
 
 .buttons a:nth-of-type(2) {
-  margin-left: 20px;
+  margin-left: 14px;
 }
 
 .buttons a:hover {
