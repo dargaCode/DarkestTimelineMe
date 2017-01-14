@@ -15,6 +15,10 @@ html, body {
 
 body {
   font-family: 'Fira Sans Condensed', sans-serif;
+  background-image: url(background.jpg);
+  background-position: center;
+  background-attachment: scroll;
+  background-size: contain;
 }
 
 a {
