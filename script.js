@@ -1,8 +1,8 @@
 
 //CONSTANTS
 
-const DEFAULT_BACKGROUND_PATH = 'troy-and-abed.jpg';
-const OVERLAY_IMAGE_PATH = 'beard.png';
+const DEFAULT_BACKGROUND_PATH = 'img/troy-and-abed.jpg';
+const OVERLAY_IMAGE_PATH = 'img/beard.png';
 
 // CLASSES
 
