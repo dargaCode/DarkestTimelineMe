@@ -6,13 +6,19 @@ html, body {
   margin: 0;
   padding: 0;
   background: #3c3c3c;
+  font-size: 17px;
 }
 
 h1 {
+  font-family: 'Graduate', sans-serif; 
   text-align: center;
   font-size: 46px;
   color: #222;
   margin: 50px 0 0;
+ }
+
+body {
+  font-family: 'Fira Sans Condensed', sans-serif;
 }
 
 a {
@@ -85,6 +91,10 @@ canvas {
   border-radius: 10px;
 }
 
+.slider-group a {
+  font-family: sans-serif;
+}
+
 .slider-group a:hover {
   text-decoration: none;
 }
@@ -100,7 +110,7 @@ canvas {
 .buttons a {
   display: block;
   text-align: center;
-  font-size: 17px;
+  font-size: 18px;
   width: 200px;
   margin: 10px auto;
 }
