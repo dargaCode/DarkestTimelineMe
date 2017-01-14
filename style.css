@@ -28,8 +28,8 @@ a:hover {
 /*CONTAINER*/
 
 .container {
-  max-width: 700px;
-  height: 580px;
+  max-width: 650px;
+  height: inherit;
   margin: 0 auto;
   padding-top: 2px;
   background: #666;
@@ -40,10 +40,6 @@ a:hover {
 /*HEADER*/
 
 header {
-  height: 160px;
-  background: #666;
-  /*prevent margin collapse with children*/
-  overflow: hidden;
 }
 
 /*CANVAS*/
@@ -60,10 +56,6 @@ canvas {
 
 .slider-group {
   text-align: center;
-  margin-bottom: 12px;
-}
-
-.slider-group .frame {
   font-size: 28px;
   font-weight: bold;
   width: 275px;
@@ -101,11 +93,6 @@ canvas {
   font-size: 26px;
   position: relative;
   bottom: 1px;
-}
-
-.slider-group label {
-  display: block;
-  color: #222;
 }
 
 /*BUTTONS*/
