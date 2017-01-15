@@ -36,7 +36,7 @@ a:hover {
   max-width: 650px;
   min-height: 100%;
   margin: 0 auto;
-  background: #575757;
+  background: #6d6d6d;
   border: 2px solid #222;
 }
 
@@ -64,7 +64,7 @@ header .dargacode {
   text-align: center;
   font-weight: bold;
   margin-bottom: 16px;
-  color: #b8b8b8;
+  color: #d8d8d8;
 }
 
 header p {
