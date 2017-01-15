@@ -34,9 +34,8 @@ a:hover {
 
 .container {
   max-width: 650px;
-  height: inherit;
+  min-height: 100%;
   margin: 0 auto;
-  padding-top: 2px;
   background: #575757;
   border: 2px solid #222;
 }
@@ -45,14 +44,14 @@ a:hover {
 
 header {
   text-align: center;
-  padding: 20px 0;
+  padding: 16px 0 18px;
 }
 
 header h1 {
   font-family: 'Graduate', sans-serif;
   font-size: 40px;
   max-width: 525px;
-  margin: 0 auto 3px;
+  margin: 0 auto 4px;
   padding: 15px;
   color: #d8d8d8;
   background: #224C8C;
@@ -61,9 +60,20 @@ header h1 {
 }
 
 header .dargacode {
+  display: block;
   text-align: center;
   font-weight: bold;
+  margin-bottom: 16px;
   color: #b8b8b8;
+}
+
+header p {
+  max-width: 525px;
+  font-size: 18px;
+  line-height: 1.5;
+  margin: 0 auto;
+  color: #0f223e;
+  font-style: italic;
 }
 
 /*CANVAS*/
@@ -72,7 +82,7 @@ canvas {
   display: block;
   outline: 2px solid #222;
   background: #eee;
-  margin: 0 auto 22px;
+  margin: 0 auto 18px;
   cursor: move;
 }
 
@@ -83,7 +93,7 @@ canvas {
   font-size: 28px;
   font-weight: bold;
   width: 404px;
-  margin: 0 auto 15px;
+  margin: 0 auto 18px;
   padding: 5px 12px 8px;
   border-radius: 12px;
   background: #3c3c3c;
@@ -128,7 +138,6 @@ canvas {
 
 .buttons {
   text-align: center;
-  margin-top: 20px;
   /*remove space between inline-block elements*/
   font-size: 0;
 }
