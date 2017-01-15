@@ -51,7 +51,7 @@ header h1 {
   font-family: 'Graduate', sans-serif;
   font-size: 40px;
   max-width: 525px;
-  margin: 0 auto 4px;
+  margin: 0 auto;
   padding: 15px;
   color: #d8d8d8;
   background: #224C8C;
@@ -60,10 +60,11 @@ header h1 {
 }
 
 header .dargacode {
-  display: block;
+  display: inline-block;
   text-align: center;
   font-weight: bold;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  padding: 4px 10px;
   color: #d8d8d8;
 }
 
