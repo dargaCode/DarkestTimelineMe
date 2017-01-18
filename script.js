@@ -462,6 +462,34 @@ UiManager.prototype.addEvents = function() {
     self.handleDragEnd();
   });
 
+  // mobile touch events, duplicates of mouse
+  this.canvas.addEventListener('touchstart', function(e) {
+    const touch = e.changedTouches[0];
+
+    const fakeMouseEvent = {
+      clientX: touch.clientX,
+      clientY: touch.clientY,
+    }
+
+    self.handleDragBegin(fakeMouseEvent);
+  });
+
+  this.canvas.addEventListener('touchmove', function(e) {
+    const touch = e.changedTouches[0];
+
+    const fakeMouseEvent = {
+      clientX: touch.clientX,
+      clientY: touch.clientY,
+    }
+
+    self.handleDrag(fakeMouseEvent);
+  });
+
+  this.canvas.addEventListener('touchend', function() {
+    self.handleDragEnd();
+  });
+  // end mobile events
+
   this.canvas.addEventListener('mouseout', function() {
     self.handleDragEnd();
   });
@@ -502,16 +530,16 @@ UiManager.prototype.addEvents = function() {
 }
 
 UiManager.prototype.handleDragBegin = function(e) {
-  const cursorX = e.offsetX;
-  const cursorY = e.offsetY;
+  const cursorX = e.clientX;
+  const cursorY = e.clientY;
 
   // start dragging from the click location
   this.imageDragger.dragBegin(cursorX, cursorY);
 }
 
 UiManager.prototype.handleDrag = function(e) {
-  const currentX = e.offsetX;
-  const currentY = e.offsetY;
+  const currentX = e.clientX;
+  const currentY = e.clientY;
 
   this.imageDragger.drag(currentX, currentY);
 }
