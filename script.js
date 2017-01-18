@@ -464,25 +464,21 @@ UiManager.prototype.addEvents = function() {
 
   // mobile touch events, duplicates of mouse
   this.canvas.addEventListener('touchstart', function(e) {
-    const touch = e.changedTouches[0];
-
-    const fakeMouseEvent = {
-      clientX: touch.clientX,
-      clientY: touch.clientY,
-    }
+    const fakeMouseEvent = self.getConvertedTouchEvent(e);
 
     self.handleDragBegin(fakeMouseEvent);
+
+    // don't scroll the entire page
+    e.preventDefault();
   });
 
   this.canvas.addEventListener('touchmove', function(e) {
-    const touch = e.changedTouches[0];
-
-    const fakeMouseEvent = {
-      clientX: touch.clientX,
-      clientY: touch.clientY,
-    }
+    const fakeMouseEvent = self.getConvertedTouchEvent(e);
 
     self.handleDrag(fakeMouseEvent);
+
+    // don't scroll the entire page
+    e.preventDefault();
   });
 
   this.canvas.addEventListener('touchend', function() {
@@ -596,6 +592,17 @@ UiManager.prototype.handleZoomButtonClick = function(slider, incrementCount) {
 
   slider.value = newPosition;
   this.handleZoomChange(slider)
+}
+
+UiManager.prototype.getConvertedTouchEvent = function(e) {
+  const touch = e.changedTouches[0];
+
+  const convertedEvent = {
+    clientX: touch.clientX,
+    clientY: touch.clientY,
+  };
+
+  return convertedEvent;
 }
 
 UiManager.prototype.getIncrementedPosition = function(slider, incrementCount) {
