@@ -452,6 +452,9 @@ UiManager.prototype.addEvents = function() {
 
   this.canvas.addEventListener('mousedown', function(e) {
     self.handleDragBegin(e);
+
+    // don't highlight text
+    e.preventDefault();
   });
 
   this.canvas.addEventListener('mousemove', function(e) {
